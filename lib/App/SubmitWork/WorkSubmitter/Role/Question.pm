@@ -4,8 +4,8 @@ package App::SubmitWork::WorkSubmitter::Role::Question;
 
 use App::SubmitWork::Wrapper::OurMoose::Role;
 
+use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use Term::EditorEdit;
 
 requires 'ask';
 
@@ -81,15 +81,17 @@ sub ask_question ( $self, $question, @responses ) {
     # todo: It would be nice if the notes persisted to disk for a given PT so
     # that I could ctrl-c out of a later question and still not have to retype
     # previously asked questions.  That's a task for another day however.
-    my $answer = Term::EditorEdit->edit(
-        separator => '---',
-        document  => <<"ENDOFTEXT",
+
+    my $prompt = <<"ENDOFTEXT";
 $question
 
 Complete your answer below the line in markdown.
 ---
 ENDOFTEXT
-    );
+    my $fh = solicit($prompt);
+
+    my $answer = do { local $/ = undef; <$fh> };
+    $answer =~ s/\A\Q$prompt//;
 
     return $self->format_qa_markdown( $question, $answer );
 }

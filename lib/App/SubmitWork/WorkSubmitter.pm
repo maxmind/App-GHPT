@@ -9,8 +9,8 @@ use IPC::Run3 qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
 use List::AllUtils qw( part );
 use Path::Class qw( dir file );
+use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use Term::EditorEdit;
 use WebService::PivotalTracker 0.04;
 
 with 'MooseX::Getopt::Dashes';
@@ -163,7 +163,8 @@ sub _confirm_story ( $self, $text ) {
     my $result = choose( [ 'Accept', 'Edit' ], { prompt => $text } )
         or exit 1;    # user hit q or ctrl-d to quit
     return $text if $result eq 'Accept';
-    return Term::EditorEdit->edit( document => $text );
+    my $fh = solicit($text);
+    return do { local $/ = undef; <$fh> };
 }
 
 sub _text_for_story ( $self, $story ) {
