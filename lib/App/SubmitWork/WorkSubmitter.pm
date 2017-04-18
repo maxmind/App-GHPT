@@ -2,17 +2,18 @@ package App::SubmitWork::WorkSubmitter;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+use App::SubmitWork::Types qw( Bool PositiveInt Str );
+use App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 use File::HomeDir ();
 use IPC::Run3 qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
 use List::AllUtils qw( part );
-use App::SubmitWork::Types qw( Bool PositiveInt Str );
-use App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 use Path::Class qw( dir file );
 use Term::Choose qw( choose );
 use Term::EditorEdit;
+use WebService::PivotalTracker 0.04;
 
-with 'App::SubmitWork::WorkSubmitter::Role::HasPT', 'MooseX::Getopt::Dashes';
+with 'MooseX::Getopt::Dashes';
 
 has project => (
     is       => 'ro',
@@ -44,6 +45,21 @@ has _username => (
         sub ($self) { $self->_config_val('submit-work.pivotaltracker.username') },
 );
 
+has _pt_api => (
+    is      => 'ro',
+    isa     => 'WebService::PivotalTracker',
+    lazy    => 1,
+    builder => '_build_pt_api',
+    documentation =>
+        'A WebService::PivotalTracker object built using $self->_pt_token',
+);
+
+sub _build_pt_api ($self) {
+    return WebService::PivotalTracker->new(
+        token => $self->_pt_token,
+    );
+}
+
 has _pt_project_id => (
     is      => 'ro',
     isa     => PositiveInt,
@@ -51,10 +67,18 @@ has _pt_project_id => (
     builder => '_build_pt_project_id',
 );
 
+sub _build_pt_project_id ($self) {
+    my $want = $self->project;
+    for my $project ( $self->_pt_api->projects->@* ) {
+        my $munged_name = lc $project->name =~ s/ /-/gr;
+        return $project->id if $munged_name =~ /$want/;
+    }
+    die 'Could not find a project id for project named ' . $self->project;
+}
+
 before print_usage_text => sub {
     say <<'EOF';
-Please see POD in submit-work.pl for installation and troubleshooting
-directions.
+Please see POD in App::SubmitWork for installation and troubleshooting directions.
 EOF
 };
 
@@ -133,15 +157,6 @@ sub _choose_pt_story ($self) {
     return unless $chosen_story;
 
     return $stories_lookup{$chosen_story};
-}
-
-sub _build_pt_project_id ($self) {
-    my $want = $self->project;
-    for my $project ( $self->_pt_api->projects->@* ) {
-        my $munged_name = lc $project->name =~ s/ /-/gr;
-        return $project->id if $munged_name =~ /$want/;
-    }
-    die 'Could not find a project id for project named ' . $self->project;
 }
 
 sub _confirm_story ( $self, $text ) {
