@@ -15,11 +15,11 @@ use Term::EditorEdit;
 with 'App::SubmitWork::WorkSubmitter::Role::HasPT', 'MooseX::Getopt::Dashes';
 
 has project => (
-    is      => 'ro',
-    isa     => Str,
-    default => 'development',
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
     documentation =>
-        'The PT project to search. {data-analysis|development|minf|qa|sysadmin}',
+        'The name of the PT project to search. This will be matched against the names of all the projects you have access to.',
 );
 
 has base => (
