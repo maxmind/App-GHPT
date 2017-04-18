@@ -70,8 +70,8 @@ has _pt_project_id => (
 sub _build_pt_project_id ($self) {
     my $want = $self->project;
     for my $project ( $self->_pt_api->projects->@* ) {
-        my $munged_name = lc $project->name =~ s/ /-/gr;
-        return $project->id if $munged_name =~ /$want/;
+        my $munged_name = $project->name =~ s/ /-/gr;
+        return $project->id if $munged_name =~ /$want/i;
     }
     die 'Could not find a project id for project named ' . $self->project;
 }
@@ -102,7 +102,7 @@ sub run ($self) {
     );
     $self->_update_pt_story( $chosen_story, $pull_request_url );
     say $chosen_story->url;
-    say $pull_request_url;
+   say $pull_request_url;
 
     return 0;
 }
