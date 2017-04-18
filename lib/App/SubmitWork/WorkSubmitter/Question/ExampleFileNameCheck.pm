@@ -1,6 +1,6 @@
 package App::SubmitWork::WorkSubmitter::Question::ExampleFileNameCheck;
 
-# ABSTRACT: Confirm the DB migration will run before or after backend updates
+# ABSTRACT: An example supplemental question
 
 use App::SubmitWork::Wrapper::OurMoose;
 
