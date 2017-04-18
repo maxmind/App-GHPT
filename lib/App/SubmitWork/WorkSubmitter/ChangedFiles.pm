@@ -17,26 +17,28 @@ branch, as well as what files exist in the branch.
 
 Normally constructed by L<App::SubmitWork::WorkSubmitter::ChangedFilesFactory>.
 
-=attribute added_files
+=head1 ATTRIBUTES
+
+=head2 added_files
 
 All files added in this branch.
 
 Arrayref of String. Required.
 
-=attribute modified_files
+=head2 modified_files
 
 All files modified in this branch (excluding those that were added in this
 branch)
 
 Arrayref of String. Required.
 
-=attribute deleted_files
+=head2 deleted_files
 
 All files deleted in this branch.
 
 Arrayref of String. Required.
 
-=attribute all_Files
+=head2 all_files
 
 All files in this branch (including those created before the branch was
 branched.)  i.e. every file that you'd get from a fresh checkout of this
@@ -70,9 +72,9 @@ sub _build_file_exists_hash ($self) {
     return +{ map { $_ => 1 } $self->all_files->@* };
 }
 
-=head2 Methods
+=head1 METHODS
 
-=method changed_files
+=head2 $changed->changed_files
 
 All changed files (i.e. all files that were either added or modified in
 this branch.)  Returns Arrayref of Strings.
@@ -83,7 +85,7 @@ sub changed_files ($self) {
     return [ uniq sort $self->added_files->@*, $self->modified_files->@* ];
 }
 
-=method changed_files_match( $regex )
+=head2 $changed->changed_files_match( $regex )
 
 Returns true iff any of the changed files filenames match the passed regex
 
@@ -93,7 +95,7 @@ sub changed_files_match ( $self, $regex ) {
     return any { $_ =~ $regex } $self->changed_files->@*;
 }
 
-=method changed_files_matching( $regex )
+=head2 $changed->changed_files_matching( $regex )
 
 Returns a list of changed files filenames matching the passed regex
 
@@ -103,7 +105,7 @@ sub changed_files_matching ( $self, $regex ) {
     return grep { $_ =~ $regex } $self->changed_files->@*;
 }
 
-=method file_exists( $path )
+=head2 $changed->file_exists( $path )
 
 Does the passed file exist on the branch (i.e. if you were to do a fresh
 checkout of this branch would the file be present)
@@ -114,7 +116,7 @@ sub file_exists ( $self, $path ) {
     return $self->_file_exists_hash->{$path};
 }
 
-=method file_status( $path )
+=head2 $changed->file_status( $path )
 
 Returns the file status.  This is either C<A> (added), C<D> (deleted), C<M>
 (modified), C< > (exists, not modified) or undef (doesn't exist).

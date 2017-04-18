@@ -22,7 +22,9 @@ about and find.
 This module searches for all C<App::SubmitWork::WorkSubmitter::Question::*> modules and uses
 them to produce markdown.
 
-=attribute merge_to_branch_name
+=head1 ATTRIBUTES
+
+=head2 merge_to_branch_name
 
 The name of the branch that we're creating the pull request against.  This is
 probably C<master>.
@@ -67,7 +69,9 @@ sub _build_questions ($self) {
     ];
 }
 
-=method ask_questions
+=head1 METHODS
+
+=head2 $asker->ask_questions
 
 Ask all the questions, return markdown.
 

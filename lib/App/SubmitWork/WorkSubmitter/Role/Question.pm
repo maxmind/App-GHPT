@@ -41,7 +41,9 @@ each time submit-work is run.
 Each class must supply an C<ask> method which should prompt the user as needed
 and return any markdown to be placed in the pull request body.
 
-=attribute changed_files
+=head1 ATTRIBUTES
+
+=head2 changed_files
 
 The files that have changed in this branch.  This is the primary attribute
 you want to examine.
@@ -54,7 +56,9 @@ has changed_files => (
     required => 1,
 );
 
-=method ask_question($question, @optional_responses)
+=head1 METHODS
+
+=head2 $question->ask_question($question, @optional_responses)
 
 Interatively ask a question and return markdown suitable for including in the
 pull request body.
