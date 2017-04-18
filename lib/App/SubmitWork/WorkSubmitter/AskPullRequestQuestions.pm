@@ -1,11 +1,12 @@
 package App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
+
+# ABSTRACT: Ask questions to go in the pull request
+
 use App::SubmitWork::Wrapper::OurMoose;
 
 use App::SubmitWork::Types qw( ArrayRef Str );
 use Module::Pluggable::Object;
 use App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
-
-# ABSTRACT: Ask questions to go in the pull request
 
 =head1 SYNOPSIS
 
