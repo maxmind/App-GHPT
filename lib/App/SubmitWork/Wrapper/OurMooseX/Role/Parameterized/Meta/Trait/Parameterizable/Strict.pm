@@ -2,6 +2,8 @@ package App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized::Meta::Trait::P
 
 use App::SubmitWork::Wrapper::OurMoose::Role;
 
+our $VERSION = '1.000000';
+
 with 'MooseX::Role::Parameterized::Meta::Trait::Parameterizable';
 
 around construct_parameters => sub ( $orig, $self, %params ) {
@@ -10,7 +12,7 @@ around construct_parameters => sub ( $orig, $self, %params ) {
         -excludes => 1,
         (
             map { $_ => 1 }
-                grep { defined }
+                grep {defined}
                 map  { $_->init_arg }
                 $self->parameters_metaclass->get_all_attributes
         ),

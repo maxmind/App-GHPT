@@ -6,8 +6,8 @@ use App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
 ########################################################################
 
 has branch_name => (
-    is => 'ro',
-    default => sub { return 'test-'.time.'-'.$$; },
+    is      => 'ro',
+    default => sub { return 'test-' . time . '-' . $$; },
 );
 
 sub test_startup ( $self, @ ) {
@@ -16,13 +16,13 @@ sub test_startup ( $self, @ ) {
         return;
     }
 
-    system('git', 'checkout', '-b', $self->branch_name );
+    system( 'git', 'checkout', '-b', $self->branch_name );
 
     _delete( 't/test-data/todelete1', 1 );
     _delete( 't/test-data/todelete2', 1 );
     _commit('delete files');
-    _create( 't/test-data/tocreate1', 'example1',  1 );
-    _create( 't/test-data/tocreate2', 'example2',  1 );
+    _create( 't/test-data/tocreate1', 'example1', 1 );
+    _create( 't/test-data/tocreate2', 'example2', 1 );
     _commit('add files');
     _append( 't/test-data/tomodify1', 'extra text', 1 );
     _append( 't/test-data/tomodify2', 'extra text', 1 );
@@ -51,6 +51,7 @@ sub _delete ( $filename, $git_add = 0 ) {
 }
 
 sub _write ( $filename, $mode, $text ) {
+    ## no critic (InputOutput::RequireBriefOpen)
     my $fh;
     open $fh, $mode, $filename;
     print $fh $text;
@@ -66,10 +67,10 @@ sub test_shutdown ( $self, @ ) {
     # git reset everything back the way it was, but
     # manually fix everything so we don't mess up anything else in
     # the working tree / staging area
-    system( 'git', 'reset', 'master', 't/test-data/not-committed-todelete');
-    system( 'git', 'checkout', 't/test-data/not-committed-tomodify');
-    system( 'git', 'checkout', 't/test-data/not-committed-todelete');
-    unlink( 't/test-data/not-committed-tocreate');
+    system( 'git', 'reset', 'master', 't/test-data/not-committed-todelete' );
+    system( 'git', 'checkout', 't/test-data/not-committed-tomodify' );
+    system( 'git', 'checkout', 't/test-data/not-committed-todelete' );
+    unlink('t/test-data/not-committed-tocreate');
     system( 'git', 'checkout', 'master' );
     system( 'git', 'branch', '-D', $self->branch_name );
 }

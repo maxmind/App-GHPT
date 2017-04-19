@@ -1,10 +1,10 @@
 package App::SubmitWork::WorkSubmitter::Role::FileInspector;
 
-# ASBTRACT: Role for examining the committed version of the file
+use App::SubmitWork::Wrapper::OurMoose::Role;
+
+our $VERSION = '1.000000';
 
 use IPC::Run3 qw( run3 );
-
-use App::SubmitWork::Wrapper::OurMoose::Role;
 
 sub file_contents ( $self, $path ) {
     state %cache;
@@ -27,3 +27,5 @@ sub file_contents ( $self, $path ) {
 }
 
 1;
+
+# ABSTRACT: Role for examining the committed version of the file

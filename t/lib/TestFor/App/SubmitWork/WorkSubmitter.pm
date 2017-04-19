@@ -17,8 +17,8 @@ sub test_chore_filter ( $self, @ ) {
     stdout_is(
         sub {
             ## no critic (Subroutines::ProtectPrivateSubs)
-            $stories = App::SubmitWork::WorkSubmitter->_filter_chores_and_maybe_warn_user(
-                $story_set_no_chores);
+            $stories = App::SubmitWork::WorkSubmitter
+                ->_filter_chores_and_maybe_warn_user($story_set_no_chores);
             ## use critic
         },
         q{},
@@ -35,8 +35,8 @@ sub test_chore_filter ( $self, @ ) {
     stdout_like(
         sub {
             ## no critic (Subroutines::ProtectPrivateSubs)
-            $stories = App::SubmitWork::WorkSubmitter->_filter_chores_and_maybe_warn_user(
-                $story_set_with_chores);
+            $stories = App::SubmitWork::WorkSubmitter
+                ->_filter_chores_and_maybe_warn_user($story_set_with_chores);
             ## use critic
         },
         qr/^Note: 2 chores are not shown here/a,

@@ -2,24 +2,27 @@ package App::SubmitWork::WorkSubmitter;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+our $VERSION = '1.000000';
+
+use App::SubmitWork::Types qw( Bool PositiveInt Str );
+use App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 use File::HomeDir ();
 use IPC::Run3 qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
 use List::AllUtils qw( part );
-use App::SubmitWork::Types qw( Bool PositiveInt Str );
-use App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 use Path::Class qw( dir file );
+use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use Term::EditorEdit;
+use WebService::PivotalTracker 0.04;
 
-with 'App::SubmitWork::WorkSubmitter::Role::HasPT', 'MooseX::Getopt::Dashes';
+with 'MooseX::Getopt::Dashes';
 
 has project => (
-    is      => 'ro',
-    isa     => Str,
-    default => 'development',
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
     documentation =>
-        'The PT project to search. {data-analysis|development|minf|qa|sysadmin}',
+        'The name of the PT project to search. This will be matched against the names of all the projects you have access to.',
 );
 
 has base => (
@@ -37,12 +40,28 @@ has dry_run => (
 );
 
 has _username => (
-    is   => 'ro',
-    isa  => Str,
-    lazy => 1,
-    default =>
-        sub ($self) { $self->_config_val('submit-work.pivotaltracker.username') },
+    is      => 'ro',
+    isa     => Str,
+    lazy    => 1,
+    default => sub ($self) {
+        $self->_config_val('submit-work.pivotaltracker.username');
+    },
 );
+
+has _pt_api => (
+    is      => 'ro',
+    isa     => 'WebService::PivotalTracker',
+    lazy    => 1,
+    builder => '_build_pt_api',
+    documentation =>
+        'A WebService::PivotalTracker object built using $self->_pt_token',
+);
+
+sub _build_pt_api ($self) {
+    return WebService::PivotalTracker->new(
+        token => $self->_pt_token,
+    );
+}
 
 has _pt_project_id => (
     is      => 'ro',
@@ -51,10 +70,18 @@ has _pt_project_id => (
     builder => '_build_pt_project_id',
 );
 
+sub _build_pt_project_id ($self) {
+    my $want = $self->project;
+    for my $project ( $self->_pt_api->projects->@* ) {
+        my $munged_name = $project->name =~ s/ /-/gr;
+        return $project->id if $munged_name =~ /$want/i;
+    }
+    die 'Could not find a project id for project named ' . $self->project;
+}
+
 before print_usage_text => sub {
     say <<'EOF';
-Please see POD in submit-work.pl for installation and troubleshooting
-directions.
+Please see POD in App::SubmitWork for installation and troubleshooting directions.
 EOF
 };
 
@@ -84,9 +111,10 @@ sub run ($self) {
 }
 
 sub _append_question_answers ( $self, $text ) {
-    my $qa_markdown = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
+    my $qa_markdown
+        = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
         merge_to_branch_name => 'origin/' . $self->base,
-    )->ask_questions;
+        )->ask_questions;
     return $text unless defined $qa_markdown and length $qa_markdown;
     return join "\n\n",
         $text,
@@ -135,20 +163,12 @@ sub _choose_pt_story ($self) {
     return $stories_lookup{$chosen_story};
 }
 
-sub _build_pt_project_id ($self) {
-    my $want = $self->project;
-    for my $project ( $self->_pt_api->projects->@* ) {
-        my $munged_name = lc $project->name =~ s/ /-/gr;
-        return $project->id if $munged_name =~ /$want/;
-    }
-    die 'Could not find a project id for project named ' . $self->project;
-}
-
 sub _confirm_story ( $self, $text ) {
     my $result = choose( [ 'Accept', 'Edit' ], { prompt => $text } )
         or exit 1;    # user hit q or ctrl-d to quit
     return $text if $result eq 'Accept';
-    return Term::EditorEdit->edit( document => $text );
+    my $fh = solicit($text);
+    return do { local $/ = undef; <$fh> };
 }
 
 sub _text_for_story ( $self, $story ) {
