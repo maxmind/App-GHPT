@@ -69,6 +69,9 @@ __END__
 
 =head1 SYNOPSIS
 
+=for test_synopsis
+use v5.20;
+
     my $factory = App::SubmitWork::WorkSubmitter::ChangedFilesFactory->new(
         merge_to_branch_name => 'master',
     );
