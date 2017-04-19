@@ -80,7 +80,7 @@ You may also get a warning like below, but this shouldn't impact the creation of
 
     Content-Length header value was wrong, fixed at /opt/perl5.20.2/lib/site_perl/5.20.2/LWP/Protocol/http.pm line 258, <> line 1.
 
-Bugs may be submitted through [https://github.com/maxmind/App-SubmitWork/issues](https://github.com/maxmind/App-SubmitWork/issues).
+Bugs may be submitted through [https://github.com/maxmind/App-GHPT/issues](https://github.com/maxmind/App-GHPT/issues).
 
 # AUTHORS
 
@@ -89,7 +89,7 @@ Bugs may be submitted through [https://github.com/maxmind/App-SubmitWork/issues]
 
 # CONTRIBUTOR
 
-Dave Rolsky <drolsky@maxmind.com>
+Mark Fowler <mfowler@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
