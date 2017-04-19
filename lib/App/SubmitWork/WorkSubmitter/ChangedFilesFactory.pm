@@ -1,34 +1,11 @@
 package App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
 
-# ABSTRACT: Work out what files have changed in the git branch
-
 use App::SubmitWork::Wrapper::OurMoose;
 
 use IPC::Run3 qw( run3 );
 use List::Gather qw( gather take );
 use App::SubmitWork::Types qw( ArrayRef HashRef Str );
 use App::SubmitWork::WorkSubmitter::ChangedFiles;
-
-=head1 SYNOPSIS
-
-  my $factory = App::SubmitWork::WorkSubmitter::ChangedFilesFactory->new(
-      merge_to_branch_name => 'master',
-  );
-
-  my $changed_files = $factory->changed_files;
-
-  say 'The files that were added or modified since branching are:';
-  say for $changed_files->changed_files;
-
-=head1 DESCRIPTION
-
-Builds a L<App::SubmitWork::WorkSubmitter::ChangedFiles> from the git repo.  Only concerns
-itself with things that have been committed, doesn't care about what's in the
-working directory at all.
-
-Used by L<App::SubmitWork::WorkSubmitter::Questioner>.
-
-=cut
 
 has changed_files_class => (
     is      => 'ro',
@@ -175,4 +152,32 @@ sub _build_changed_files ( $self, @ ) {
 }
 
 __PACKAGE__->meta->make_immutable;
+
 1;
+
+# ABSTRACT: Work out what files have changed in the git branch
+
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+  my $factory = App::SubmitWork::WorkSubmitter::ChangedFilesFactory->new(
+      merge_to_branch_name => 'master',
+  );
+
+  my $changed_files = $factory->changed_files;
+
+  say 'The files that were added or modified since branching are:';
+  say for $changed_files->changed_files;
+
+=head1 DESCRIPTION
+
+Builds a L<App::SubmitWork::WorkSubmitter::ChangedFiles> from the git repo.  Only concerns
+itself with things that have been committed, doesn't care about what's in the
+working directory at all.
+
+Used by L<App::SubmitWork::WorkSubmitter::Questioner>.
+
+=cut

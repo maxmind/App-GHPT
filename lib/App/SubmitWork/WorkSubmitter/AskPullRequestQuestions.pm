@@ -2,36 +2,9 @@ package App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
-# ABSTRACT: Ask questions to go in the pull request
-
 use App::SubmitWork::Types qw( ArrayRef Str );
 use Module::Pluggable::Object;
 use App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
-
-=head1 SYNOPSIS
-
-   my $markdown = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
-        merge_to_branch_name => 'master',
-   )->ask_questions;
-
-=head1 DESCRIPTION
-
-A module to ask questions about the branch you're creating a pull request
-about and find.
-
-This module searches for all C<App::SubmitWork::WorkSubmitter::Question::*> modules and uses
-them to produce markdown.
-
-=head1 ATTRIBUTES
-
-=head2 merge_to_branch_name
-
-The name of the branch that we're creating the pull request against.  This is
-probably C<master>.
-
-Required. Str.
-
-=cut
 
 has merge_to_branch_name => (
     is       => 'ro',
@@ -69,6 +42,43 @@ sub _build_questions ($self) {
     ];
 }
 
+sub ask_questions ($self) {
+    return join "\n", map { $_->ask } $self->_questions->@*;
+}
+
+__PACKAGE__->meta->make_immutable;
+
+1;
+
+# ABSTRACT: Ask questions to go in the pull request
+
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+   my $markdown = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
+        merge_to_branch_name => 'master',
+   )->ask_questions;
+
+=head1 DESCRIPTION
+
+A module to ask questions about the branch you're creating a pull request
+about and find.
+
+This module searches for all C<App::SubmitWork::WorkSubmitter::Question::*> modules and uses
+them to produce markdown.
+
+=head1 ATTRIBUTES
+
+=head2 merge_to_branch_name
+
+The name of the branch that we're creating the pull request against.  This is
+probably C<master>.
+
+Required. Str.
+
 =head1 METHODS
 
 =head2 $asker->ask_questions
@@ -76,10 +86,3 @@ sub _build_questions ($self) {
 Ask all the questions, return markdown.
 
 =cut
-
-sub ask_questions ($self) {
-    return join "\n", map { $_->ask } $self->_questions->@*;
-}
-
-__PACKAGE__->meta->make_immutable;
-1;

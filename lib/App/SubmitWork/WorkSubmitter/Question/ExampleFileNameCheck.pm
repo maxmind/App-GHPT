@@ -1,7 +1,5 @@
 package App::SubmitWork::WorkSubmitter::Question::ExampleFileNameCheck;
 
-# ABSTRACT: An example supplemental question
-
 use App::SubmitWork::Wrapper::OurMoose;
 
 use List::Gather qw( gather take );
@@ -45,5 +43,7 @@ ENDOFQUESTION
 }
 
 __PACKAGE__->meta->make_immutable;
+
 1;
 
+# ABSTRACT: An example supplemental question

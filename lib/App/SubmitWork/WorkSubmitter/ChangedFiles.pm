@@ -5,9 +5,75 @@ use App::SubmitWork::Wrapper::OurMoose;
 use List::Util qw( any uniq );
 use App::SubmitWork::Types qw( ArrayRef HashRef Str );
 
+has [
+    qw(
+        added_files
+        all_files
+        deleted_files
+        modified_files
+        )
+    ] => (
+    is       => 'ro',
+    isa      => ArrayRef [Str],
+    required => 1,
+    );
+
+has _file_exists_hash => (
+    is      => 'ro',
+    isa     => HashRef,
+    lazy    => 1,
+    builder => '_build_file_exists_hash',
+);
+
+sub _build_file_exists_hash ($self) {
+    return +{ map { $_ => 1 } $self->all_files->@* };
+}
+
+sub changed_files ($self) {
+    return [ uniq sort $self->added_files->@*, $self->modified_files->@* ];
+}
+
+sub changed_files_match ( $self, $regex ) {
+    return any { $_ =~ $regex } $self->changed_files->@*;
+}
+
+sub changed_files_matching ( $self, $regex ) {
+    return grep { $_ =~ $regex } $self->changed_files->@*;
+}
+
+sub file_exists ( $self, $path ) {
+    return $self->_file_exists_hash->{$path};
+}
+
+# this is inefficently written, but it shouldn't really make any difference
+# for the number of files we're talking about here
+sub file_status ( $self, $path ) {
+    return 'A' if any { $_ eq $path } $self->added_files->@*;
+    return 'M' if any { $_ eq $path } $self->modified_files->@*;
+    return 'D' if any { $_ eq $path } $self->deleted_files->@*;
+    return q{ } if $self->file_exists($path);
+    return undef;
+}
+
+__PACKAGE__->meta->make_immutable;
+
+1;
+
+# ABSTRACT: Contains all the files that were modified or added in a branch
+
+__END__
+
+=pod
+
 =head1 SYNOPSIS
 
-    # print out all modified / addded file in this branch
+    my $factory = App::SubmitWork::WorkSubmitter::ChangedFilesFactory->new(
+        merge_to_branch_name => 'master',
+    );
+
+    my $changed_files = $factory->changed_files;
+
+    # print out all modified / added file in this branch
     say for $changed_files->changed_files->@*;
 
 =head1 DESCRIPTION
@@ -46,32 +112,6 @@ branch.
 
 Arrayref of String. Required.
 
-=cut
-
-has [
-    qw(
-        added_files
-        all_files
-        deleted_files
-        modified_files
-        )
-    ] => (
-    is       => 'ro',
-    isa      => ArrayRef [Str],
-    required => 1,
-    );
-
-has _file_exists_hash => (
-    is      => 'ro',
-    isa     => HashRef,
-    lazy    => 1,
-    builder => '_build_file_exists_hash',
-);
-
-sub _build_file_exists_hash ($self) {
-    return +{ map { $_ => 1 } $self->all_files->@* };
-}
-
 =head1 METHODS
 
 =head2 $changed->changed_files
@@ -79,42 +119,18 @@ sub _build_file_exists_hash ($self) {
 All changed files (i.e. all files that were either added or modified in
 this branch.)  Returns Arrayref of Strings.
 
-=cut
-
-sub changed_files ($self) {
-    return [ uniq sort $self->added_files->@*, $self->modified_files->@* ];
-}
-
 =head2 $changed->changed_files_match( $regex )
 
 Returns true iff any of the changed files filenames match the passed regex
-
-=cut
-
-sub changed_files_match ( $self, $regex ) {
-    return any { $_ =~ $regex } $self->changed_files->@*;
-}
 
 =head2 $changed->changed_files_matching( $regex )
 
 Returns a list of changed files filenames matching the passed regex
 
-=cut
-
-sub changed_files_matching ( $self, $regex ) {
-    return grep { $_ =~ $regex } $self->changed_files->@*;
-}
-
 =head2 $changed->file_exists( $path )
 
 Does the passed file exist on the branch (i.e. if you were to do a fresh
 checkout of this branch would the file be present)
-
-=cut
-
-sub file_exists ( $self, $path ) {
-    return $self->_file_exists_hash->{$path};
-}
 
 =head2 $changed->file_status( $path )
 
@@ -122,16 +138,3 @@ Returns the file status.  This is either C<A> (added), C<D> (deleted), C<M>
 (modified), C< > (exists, not modified) or undef (doesn't exist).
 
 =cut
-
-# this is inefficently written, but it shouldn't really make any difference
-# for the number of files we're talking about here
-sub file_status ( $self, $path ) {
-    return 'A' if any { $_ eq $path } $self->added_files->@*;
-    return 'M' if any { $_ eq $path } $self->modified_files->@*;
-    return 'D' if any { $_ eq $path } $self->deleted_files->@*;
-    return q{ } if $self->file_exists($path);
-    return undef;
-}
-
-__PACKAGE__->meta->make_immutable;
-1;
