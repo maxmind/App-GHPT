@@ -5,6 +5,8 @@ package App::SubmitWork::Wrapper::Ourperl;
 use strict;
 use warnings;
 
+our $VERSION = '1.000000';
+
 use Import::Into;
 
 # XXX - it'd be nice to include bareword::filehandles but this conflicts with
@@ -70,3 +72,4 @@ Using this wrapper is equivalent to the following:
     no indirect ':fatal';
     no multidimensional;
 
+=cut

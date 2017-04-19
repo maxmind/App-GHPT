@@ -2,6 +2,8 @@ package App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+our $VERSION = '1.000000';
+
 use IPC::Run3 qw( run3 );
 use List::Gather qw( gather take );
 use App::SubmitWork::Types qw( ArrayRef HashRef Str );

@@ -2,6 +2,8 @@ package App::SubmitWork::Wrapper::OurMoose::Role;
 
 use App::SubmitWork::Wrapper::Ourperl;
 
+our $VERSION = '1.000000';
+
 use Import::Into;
 use Moose::Exporter;
 use Moose::Role                    ();

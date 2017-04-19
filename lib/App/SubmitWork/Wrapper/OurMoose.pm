@@ -4,6 +4,8 @@ package App::SubmitWork::Wrapper::OurMoose;
 
 use App::SubmitWork::Wrapper::Ourperl;
 
+our $VERSION = '1.000000';
+
 use Import::Into;
 use Moose ();
 use Moose::Exporter;

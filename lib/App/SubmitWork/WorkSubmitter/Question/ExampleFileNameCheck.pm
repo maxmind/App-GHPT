@@ -2,11 +2,13 @@ package App::SubmitWork::WorkSubmitter::Question::ExampleFileNameCheck;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+our $VERSION = '1.000000';
+
 use List::Gather qw( gather take );
 
 with('App::SubmitWork::WorkSubmitter::Role::Question');
 
-sub ask($self) {
+sub ask ($self) {
 
     # must return an array of text to insert in the pull request description
     return gather {

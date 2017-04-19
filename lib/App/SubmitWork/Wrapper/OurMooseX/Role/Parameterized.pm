@@ -2,6 +2,8 @@ package App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized;
 
 use App::SubmitWork::Wrapper::Ourperl;
 
+our $VERSION = '1.000000';
+
 use Import::Into;
 use Moose::Exporter;
 use Moose::Util qw( find_meta );

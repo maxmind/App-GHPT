@@ -2,6 +2,8 @@ package App::SubmitWork::WorkSubmitter;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+our $VERSION = '1.000000';
+
 use App::SubmitWork::Types qw( Bool PositiveInt Str );
 use App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 use File::HomeDir ();

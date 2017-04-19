@@ -2,6 +2,8 @@ package App::SubmitWork::WorkSubmitter::Role::Question;
 
 use App::SubmitWork::Wrapper::OurMoose::Role;
 
+our $VERSION = '1.000000';
+
 use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
 

@@ -2,6 +2,8 @@ package App::SubmitWork::WorkSubmitter::AskPullRequestQuestions;
 
 use App::SubmitWork::Wrapper::OurMoose;
 
+our $VERSION = '1.000000';
+
 use App::SubmitWork::Types qw( ArrayRef Str );
 use Module::Pluggable::Object;
 use App::SubmitWork::WorkSubmitter::ChangedFilesFactory;
