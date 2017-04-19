@@ -100,9 +100,11 @@ ENDOFTEXT
     return $self->format_qa_markdown( $question, $answer );
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _trim ($text) {
     return $text =~ s/\A\s+//r =~ s/\s+\z//r;
 }
+## use critic
 
 sub format_qa_markdown ( $self, $question, $answer ) {
     return <<"ENDOFMARKDOWN"

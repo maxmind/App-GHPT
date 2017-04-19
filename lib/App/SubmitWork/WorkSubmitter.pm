@@ -38,11 +38,12 @@ has dry_run => (
 );
 
 has _username => (
-    is   => 'ro',
-    isa  => Str,
-    lazy => 1,
-    default =>
-        sub ($self) { $self->_config_val('submit-work.pivotaltracker.username') },
+    is      => 'ro',
+    isa     => Str,
+    lazy    => 1,
+    default => sub ($self) {
+        $self->_config_val('submit-work.pivotaltracker.username');
+    },
 );
 
 has _pt_api => (
@@ -102,15 +103,16 @@ sub run ($self) {
     );
     $self->_update_pt_story( $chosen_story, $pull_request_url );
     say $chosen_story->url;
-   say $pull_request_url;
+    say $pull_request_url;
 
     return 0;
 }
 
 sub _append_question_answers ( $self, $text ) {
-    my $qa_markdown = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
+    my $qa_markdown
+        = App::SubmitWork::WorkSubmitter::AskPullRequestQuestions->new(
         merge_to_branch_name => 'origin/' . $self->base,
-    )->ask_questions;
+        )->ask_questions;
     return $text unless defined $qa_markdown and length $qa_markdown;
     return join "\n\n",
         $text,

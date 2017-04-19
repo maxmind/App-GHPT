@@ -6,11 +6,10 @@ use App::SubmitWork::Wrapper::OurMoose;
 
 use List::Gather qw( gather take );
 
-with(
-    'App::SubmitWork::WorkSubmitter::Role::Question'
-);
+with('App::SubmitWork::WorkSubmitter::Role::Question');
 
 sub ask($self) {
+
     # must return an array of text to insert in the pull request description
     return gather {
         for my $file (
@@ -18,8 +17,8 @@ sub ask($self) {
             'do/not/touch',
             'abandon/hope/all/who/edit/this/file',
             'badfile',
-        ) {
-            next unless $self->changed_files->file_exists( $file );
+            ) {
+            next unless $self->changed_files->file_exists($file);
 
             # if our class had consumed the
             # App::SubmitWork::WorkSubmitter::Role::FileInspector role we could

@@ -14,10 +14,15 @@ severity = 3
 [ControlStructures::ProhibitCStyleForLoops]
 severity = 3
 
-[InputOutput::RequireCheckedSyscalls]
-functions = :builtins
-exclude_functions = sleep
-severity = 3
+# Disabled until it can be told that there are other modules that export
+# autodie - see https://github.com/Perl-Critic/Perl-Critic/pull/747
+#[InputOutput::RequireCheckedSyscalls]
+#functions = :builtins
+#exclude_functions = sleep
+#severity = 3
+
+[-InputOutput::RequireCheckedOpen]
+[-InputOutput::RequireCheckedClose]
 
 [RegularExpressions::ProhibitComplexRegexes]
 max_characters = 200
@@ -42,6 +47,12 @@ severity = 3
 
 [Variables::ProhibitPackageVars]
 add_packages = Carp Test::Builder
+
+[TestingAndDebugging::RequireUseStrict]
+equivalent_modules = App::SubmitWork::Wrapper::Ourperl App::SubmitWork::Wrapper::OurMoose App::SubmitWork::Wrapper::OurMoose::Role App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized App::SubmitWork::Wrapper::OurTest::Class::Moose
+
+[TestingAndDebugging::RequireUseWarnings]
+equivalent_modules = App::SubmitWork::Wrapper::Ourperl App::SubmitWork::Wrapper::OurMoose App::SubmitWork::Wrapper::OurMoose::Role App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized App::SubmitWork::Wrapper::OurTest::Class::Moose
 
 [-Subroutines::RequireFinalReturn]
 

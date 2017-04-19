@@ -28,8 +28,7 @@ sub import ( $class, @ ) {
     return;
 }
 
-sub import_extras ( $class, $for_class, $level ) {
-
+sub import_extras ( $, $for_class, $level ) {
     MooseX::SemiAffordanceAccessor->import( { into => $for_class } );
     MooseX::StrictConstructor->import( { into => $for_class } );
 
