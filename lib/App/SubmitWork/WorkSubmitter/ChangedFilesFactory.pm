@@ -180,6 +180,6 @@ Builds a L<App::SubmitWork::WorkSubmitter::ChangedFiles> from the git repo.  Onl
 itself with things that have been committed, doesn't care about what's in the
 working directory at all.
 
-Used by L<App::SubmitWork::WorkSubmitter::Questioner>.
+Used by L<App::SubmitWork::WorkSubmitter::AskPullRequestQuestions>.
 
 =cut
