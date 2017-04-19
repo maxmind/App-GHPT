@@ -95,8 +95,8 @@ request.
 
 You want to create these questions classes in the
 C<App::GHPT::WorkSubmitter::Question::*> namespace where
-L<App::GHPT::WorkSubmitter::Questioner> will automatically detect them and ask them
-each time submit-work is run.
+L<App::GHPT::WorkSubmitter::Questioner> will automatically detect them and ask
+them each time C<gh-pt.pl> is run.
 
 Each class must supply an C<ask> method which should prompt the user as needed
 and return any markdown to be placed in the pull request body.
