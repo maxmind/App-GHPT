@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+use 5.020000;
 
 use ExtUtils::MakeMaker;
 
@@ -12,12 +12,13 @@ my %WriteMakefileArgs = (
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0
   },
-  "DISTNAME" => "App-SubmitWork",
+  "DISTNAME" => "App-GHPT",
   "EXE_FILES" => [
-    "bin/submit-work.pl"
+    "bin/gh-pt.pl"
   ],
   "LICENSE" => "artistic_2",
-  "NAME" => "App::SubmitWork",
+  "MIN_PERL_VERSION" => "5.020000",
+  "NAME" => "App::GHPT",
   "PREREQ_PM" => {
     "File::HomeDir" => 0,
     "FindBin" => 0,
@@ -26,7 +27,7 @@ my %WriteMakefileArgs = (
     "Lingua::EN::Inflect" => 0,
     "List::AllUtils" => 0,
     "List::Gather" => 0,
-    "List::Util" => 0,
+    "List::Util" => "1.44",
     "Module::Pluggable::Object" => 0,
     "Moose" => 0,
     "Moose::Exporter" => 0,
@@ -38,9 +39,11 @@ my %WriteMakefileArgs = (
     "MooseX::SemiAffordanceAccessor" => 0,
     "MooseX::StrictConstructor" => 0,
     "MooseX::Types::Combine" => 0,
+    "MooseX::Types::Common::Numeric" => 0,
+    "MooseX::Types::Moose" => 0,
     "Path::Class" => 0,
+    "Term::CallEditor" => 0,
     "Term::Choose" => 0,
-    "Term::EditorEdit" => 0,
     "WebService::PivotalTracker" => "0.04",
     "autodie" => "2.25",
     "experimental" => 0,
@@ -86,7 +89,7 @@ my %FallbackPrereqs = (
   "Lingua::EN::Inflect" => 0,
   "List::AllUtils" => 0,
   "List::Gather" => 0,
-  "List::Util" => 0,
+  "List::Util" => "1.44",
   "Module::Pluggable::Object" => 0,
   "Moose" => 0,
   "Moose::Exporter" => 0,
@@ -98,9 +101,11 @@ my %FallbackPrereqs = (
   "MooseX::SemiAffordanceAccessor" => 0,
   "MooseX::StrictConstructor" => 0,
   "MooseX::Types::Combine" => 0,
+  "MooseX::Types::Common::Numeric" => 0,
+  "MooseX::Types::Moose" => 0,
   "Path::Class" => 0,
+  "Term::CallEditor" => 0,
   "Term::Choose" => 0,
-  "Term::EditorEdit" => 0,
   "Test::Class::Moose" => 0,
   "Test::Class::Moose::AttributeRegistry" => 0,
   "Test::Class::Moose::Load" => 0,

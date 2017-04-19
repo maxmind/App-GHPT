@@ -36,11 +36,11 @@ or
 
 You may need to satisfy some dependencies. The easiest way to satisfy
 dependencies is to install the last release. This is available at
-https://metacpan.org/release/App-SubmitWork
+https://metacpan.org/release/App-GHPT
 
 If you use cpanminus, you can do it without downloading the tarball first:
 
-    $ cpanm --reinstall --installdeps --with-recommends App::SubmitWork
+    $ cpanm --reinstall --installdeps --with-recommends App::GHPT
 
 Dist::Zilla is a very powerful authoring tool, but requires a number of
 author-specific plugins. If you would like to use it for contributing, install
@@ -74,7 +74,7 @@ or
 
 You can also do this via cpanm directly:
 
-    $ cpanm --reinstall --installdeps --with-develop --with-recommends App::SubmitWork
+    $ cpanm --reinstall --installdeps --with-develop --with-recommends App::GHPT
 
 Once installed, here are some dzil commands you might try:
 
@@ -100,6 +100,11 @@ can submit an issue report [via the web](https://github.com/maxmind/App-SubmitWo
 ).
 This is a good place to send your questions about the usage of this distribution.
 
+## Travis
+
+All pull requests for this distribution will be automatically tested by
+[Travis](https://travis-ci.org/) and the build status will be reported on the
+pull request page. If your build fails, please take a look at the output.
 
 ## Tidyall
 

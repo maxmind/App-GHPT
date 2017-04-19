@@ -1,30 +1,100 @@
 # NAME
 
-App::SubmitWork - create a pull request for a Pivotal Tracker ticket
+App::GHPT - A command line tool to simplify using Github and Pivotal Tracker for an agile workflow
+
+# VERSION
+
+version 1.000000
 
 # DESCRIPTION
 
-This is currently a pre-release version of some internal MaxMind code that we
-use to create a pull request for a given PT story.  Running this command line
-tool from withing a git repo allows you to interactively pick a started PT
-ticket for a given project and create a pull request between the current branch
-and master (or another branch.)  It'll ask you what text to put in the branch
-(using the contents of the PT ticket by default) and you can even setup
-questions it should ask and put the answers in the pull request based on what
-files are being changed and what they contain.  Finally it'll leave a comment on
-the PT ticket linking it to the pull request and mark the ticket as finished.
+This is a command line tool to help link together
+[GitHub](https://github.com/) and [Pivotal
+Tracker](https://www.pivotaltracker.com/). It helps enable a workflow combining
+PT stories with pull requests.
 
-At this point it's really for informational purposes only (though it all works.)
-It does things that aren't really suitable for public reuse including needing
-a very recent version of perl, and enabling experimental Perl features.  YMMV.
+The basic workflow is as follows:
 
-# AUTHOR
+1. Start a story in Pivotal Tracker.
+2. Hack, hack, hack.
+3. Run this tool, which will do the following things for you:
+    - Prompt you to select one of your active Pivotal Tracker stories.
+    - (Optional)
 
-Mark Fowler <mfowler@maxmind.com>
+        Ask you a set of questions about the work you've done. The answers are
+        included in your PR. The question generation can be customized by writing
+        plugins.
+
+    - Create a pull request on GitHub for the repo you are currently in, with the PT
+    story's title, URL, and description in the PR, a well as the optional
+    questions & answers.
+    - Add a comment on the PT story linking to the PR that was just created.
+    - Change the PT story's status to "Delivered".
+
+# SETUP
+
+## hub
+
+You should first set up `hub`. It's available at [https://hub.github.com](https://hub.github.com)
+and has installation instructions there.
+
+After installation, tell git config about it and check that it's working.
+
+    git config --global --add hub.host github.com
+    hub issue
+
+(You'll need your GitHub and/or GHE credentials.)
+
+## pt config
+
+You'll also need to tell git about your PT account:
+
+    git config --global submit-work.pivotaltracker.username thor
+    git config --global submit-work.pivotaltracker.token ae158fa0dc6570c8403f04bd35738d81
+
+(Your actual token can be found at [https://www.pivotaltracker.com/profile](https://www.pivotaltracker.com/profile))
+
+# TROUBLESHOOTING
+
+## Bad Credentials
+
+When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
+name and password that it uses to generate an OAuth token and stores it in
+`~/.config/hub`. If you have not used hub yet, this script will exit with:
+
+    $ submit-work.pl --project minf
+    Error creating pull request: Unauthorized (HTTP 401)
+    Bad credentials
+
+The fix is to regenerate the OAuth token. Delete the `~/.config/hub` file if
+you've got one, and then run a `hub` command manually, such as
+`hub browse`. After authenticating, you should be able to use this script.
+
+# BUGS
+
+This requires 'hub' to be installed and configured.
+
+A fatal error may occur if your branch exists locally, but you haven't pushed it yet.
+
+You may also get a warning like below, but this shouldn't impact the creation of your pull request.
+
+    Content-Length header value was wrong, fixed at /opt/perl5.20.2/lib/site_perl/5.20.2/LWP/Protocol/http.pm line 258, <> line 1.
+
+Bugs may be submitted through [https://github.com/maxmind/App-SubmitWork/issues](https://github.com/maxmind/App-SubmitWork/issues).
+
+# AUTHORS
+
+- Mark Fowler <mark@twoshortplanks.com>
+- Dave Rolsky <autarch@urth.org>
+
+# CONTRIBUTOR
+
+Dave Rolsky <drolsky@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2017 by MaxMind, Inc..
+This software is Copyright (c) 2017 by MaxMind, Inc.
 
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
+This is free software, licensed under:
+
+    The Artistic License 2.0 (GPL Compatible)

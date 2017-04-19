@@ -5,7 +5,7 @@
 .Makefile.old
 /.build
 /.tidyall.d
-/App-SubmitWork-*
+/App-GHPT-*
 /Build
 /_build
 /blib*

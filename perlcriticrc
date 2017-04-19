@@ -49,10 +49,10 @@ severity = 3
 add_packages = Carp Test::Builder
 
 [TestingAndDebugging::RequireUseStrict]
-equivalent_modules = App::SubmitWork::Wrapper::Ourperl App::SubmitWork::Wrapper::OurMoose App::SubmitWork::Wrapper::OurMoose::Role App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized App::SubmitWork::Wrapper::OurTest::Class::Moose
+equivalent_modules = App::GHPT::Wrapper::Ourperl App::GHPT::Wrapper::OurMoose App::GHPT::Wrapper::OurMoose::Role App::GHPT::Wrapper::OurMooseX::Role::Parameterized App::GHPT::Wrapper::OurTest::Class::Moose
 
 [TestingAndDebugging::RequireUseWarnings]
-equivalent_modules = App::SubmitWork::Wrapper::Ourperl App::SubmitWork::Wrapper::OurMoose App::SubmitWork::Wrapper::OurMoose::Role App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized App::SubmitWork::Wrapper::OurTest::Class::Moose
+equivalent_modules = App::GHPT::Wrapper::Ourperl App::GHPT::Wrapper::OurMoose App::GHPT::Wrapper::OurMoose::Role App::GHPT::Wrapper::OurMooseX::Role::Parameterized App::GHPT::Wrapper::OurTest::Class::Moose
 
 [-Subroutines::RequireFinalReturn]
 
