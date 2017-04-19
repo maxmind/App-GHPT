@@ -12,7 +12,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This is a commmand line tool to help link together
+This is a command line tool to help link together
 L<GitHub|https://github.com/> and L<Pivotal
 Tracker|https://www.pivotaltracker.com/>. It helps enable a workflow combining
 PT stories with pull requests.
@@ -93,14 +93,14 @@ You'll also need to tell git about your PT account:
 =head2 Bad Credentials
 
 When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
-name and password that it uses to generate an OAUTH token and stores it in
+name and password that it uses to generate an OAuth token and stores it in
 C<~/.config/hub>. If you have not used hub yet, this script will exit with:
 
     $ submit-work.pl --project minf
     Error creating pull request: Unauthorized (HTTP 401)
     Bad credentials
 
-The fix is to regenerate the OAUTH token. Delete the C<~/.config/hub> file if
+The fix is to regenerate the OAuth token. Delete the C<~/.config/hub> file if
 you've got one, and then run a C<hub> command manually, such as
 C<hub browse>. After authenticating, you should be able to use this script.
 

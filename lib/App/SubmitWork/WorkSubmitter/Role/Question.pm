@@ -60,10 +60,10 @@ has changed_files => (
 
 =head2 $question->ask_question($question, @optional_responses)
 
-Interatively ask a question and return markdown suitable for including in the
+Interactively ask a question and return markdown suitable for including in the
 pull request body.
 
-The question that should be asked must be passed as the first arguement, and
+The question that should be asked must be passed as the first argument, and
 all other arguments are treated as stock answers the user can select when
 asked the question.  The user will also have a final option C<Launch Editor>
 which will launch their editor and allow them free-form text input.

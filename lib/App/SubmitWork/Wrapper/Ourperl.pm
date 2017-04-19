@@ -56,7 +56,7 @@ App::SubmitWork::Wrapper::Ourperl - Loads strict, warnings, and several other pr
 
 =head1 DESCRIPTION
 
-Using mmperl is equivalent to the following:
+Using this wrapper is equivalent to the following:
 
     use strict;
     use warnings;
