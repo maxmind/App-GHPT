@@ -4,7 +4,7 @@ use App::SubmitWork::Wrapper::OurMoose;
 
 our $VERSION = '1.000000';
 
-use List::Util qw( any uniq );
+use List::Util 1.44 qw( any uniq );
 use App::SubmitWork::Types qw( ArrayRef HashRef Str );
 
 has [
