@@ -10,7 +10,7 @@ use MooseX::SemiAffordanceAccessor ();
 use
     App::SubmitWork::Wrapper::OurMooseX::Role::Parameterized::Meta::Trait::Parameterizable::Strict (
     );
-use namespace::autoclean ();
+use namespace::autoclean;
 
 my ($import) = Moose::Exporter->setup_import_methods(
     install        => [ 'unimport', 'init_meta' ],
