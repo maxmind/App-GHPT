@@ -2,6 +2,8 @@ package App::SubmitWork;
 
 use App::SubmitWork::Wrapper::Ourperl;
 
+use v5.20;
+
 our $VERSION = '1.000000';
 
 1;
