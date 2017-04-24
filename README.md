@@ -62,7 +62,7 @@ When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
 name and password that it uses to generate an OAuth token and stores it in
 `~/.config/hub`. If you have not used hub yet, this script will exit with:
 
-    $ submit-work.pl --project minf
+    $ gh-pt.pl --project my-project
     Error creating pull request: Unauthorized (HTTP 401)
     Bad credentials
 
