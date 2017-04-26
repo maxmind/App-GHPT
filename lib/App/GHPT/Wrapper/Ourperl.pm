@@ -12,7 +12,8 @@ use Import::Into;
 # XXX - it'd be nice to include bareword::filehandles but this conflicts with
 # autodie - see https://rt.cpan.org/Ticket/Display.html?id=93591
 use autodie 2.25 ();
-use experimental ();
+use IPC::System::Simple;    # to fatalize system
+use experimental     ();
 use feature          ();
 use indirect         ();
 use mro              ();

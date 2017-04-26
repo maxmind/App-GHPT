@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Add IPC::System::Simple as a prereq for the benefit of autodie. Reported by
+  Slaven Rezić. RT #121377.
+
+
 1.000000 2017-04-24
 
 - First public release.
