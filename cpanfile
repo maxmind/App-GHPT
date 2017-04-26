@@ -1,6 +1,7 @@
 requires "File::HomeDir" => "0";
 requires "FindBin" => "0";
 requires "IPC::Run3" => "0";
+requires "IPC::System::Simple" => "0";
 requires "Import::Into" => "0";
 requires "Lingua::EN::Inflect" => "0";
 requires "List::AllUtils" => "0";
