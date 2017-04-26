@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::ChangedFilesFactory;
 
 use App::GHPT::Wrapper::OurMoose;
 
-our $VERSION = '1.000001';
+our $VERSION = '1.000002';
 
 use IPC::Run3 qw( run3 );
 use List::Gather qw( gather take );
