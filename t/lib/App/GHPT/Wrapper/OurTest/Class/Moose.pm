@@ -7,7 +7,7 @@ use MooseX::StrictConstructor      ();
 use App::GHPT::Wrapper::Ourperl;
 
 use Import::Into;
-use Test::Class::Moose                    ();
+use Test::Class::Moose 0.82 ();
 use Test::Class::Moose::AttributeRegistry ();
 use Test::More;
 use namespace::autoclean ();
