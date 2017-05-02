@@ -4,7 +4,7 @@ use App::GHPT::Wrapper::OurMoose;
 
 our $VERSION = '1.000002';
 
-use App::GHPT::Types qw( Bool PositiveInt Str );
+use App::GHPT::Types qw( ArrayRef Bool PositiveInt Str );
 use App::GHPT::WorkSubmitter::AskPullRequestQuestions;
 use File::HomeDir ();
 use IPC::Run3 qw( run3 );
@@ -18,11 +18,10 @@ use WebService::PivotalTracker 0.04;
 with 'MooseX::Getopt::Dashes';
 
 has project => (
-    is       => 'ro',
-    isa      => Str,
-    required => 1,
+    is  => 'ro',
+    isa => Str,
     documentation =>
-        'The name of the PT project to search. This will be matched against the names of all the projects you have access to.',
+        'The name of the PT project to search. This will be matched against the names of all the projects you have access to. By default, all projects will be searched.',
 );
 
 has base => (
@@ -63,20 +62,24 @@ sub _build_pt_api ($self) {
     );
 }
 
-has _pt_project_id => (
+has _project_ids => (
     is      => 'ro',
-    isa     => PositiveInt,
+    isa     => ArrayRef [PositiveInt],
     lazy    => 1,
-    builder => '_build_pt_project_id',
+    builder => '_build_project_ids',
 );
 
-sub _build_pt_project_id ($self) {
+sub _build_project_ids ($self) {
     my $want = $self->project;
-    for my $project ( $self->_pt_api->projects->@* ) {
-        my $munged_name = $project->name =~ s/ /-/gr;
-        return $project->id if $munged_name =~ /$want/i;
+    if ($want) {
+        for my $project ( $self->_pt_api->projects->@* ) {
+            my $munged_name = $project->name =~ s/ /-/gr;
+            return [ $project->id ] if $munged_name =~ /$want/i;
+        }
+        die 'Could not find a project id for project named ' . $self->project;
     }
-    die 'Could not find a project id for project named ' . $self->project;
+
+    return [ map { $_->id } $self->_pt_api->projects->@* ];
 }
 
 before print_usage_text => sub {
@@ -128,6 +131,30 @@ sub _pt_token ($self) {
 }
 ## use critic
 
+sub _choose_pt_story ($self) {
+    my $stories = [
+        map {
+            $self->_pt_api->project_stories_where(
+                project_id => $_,
+                filter     => sprintf(
+                    '(owner:%s AND (state:started OR state:finished))',
+                    $self->_username
+                ),
+                )->@*
+        } $self->_project_ids->@*
+    ];
+
+    $stories = $self->_filter_chores_and_maybe_warn_user($stories);
+
+    return unless $stories->@*;
+
+    my %stories_lookup = map { $_->name => $_ } $stories->@*;
+    my $chosen_story = choose( [ sort keys %stories_lookup ] );
+    return unless $chosen_story;
+
+    return $stories_lookup{$chosen_story};
+}
+
 sub _filter_chores_and_maybe_warn_user ( $self, $stories ) {
     my ( $chore_stories, $non_chore_stories )
         = part { $_->story_type eq 'chore' ? 0 : 1 } $stories->@*;
@@ -140,26 +167,6 @@ sub _filter_chores_and_maybe_warn_user ( $self, $stories ) {
         if $chore_stories;
 
     return $non_chore_stories // [];
-}
-
-sub _choose_pt_story ($self) {
-    my $stories = $self->_pt_api->project_stories_where(
-        project_id => $self->_pt_project_id,
-        filter     => sprintf(
-            '(owner:%s AND (state:started OR state:finished))',
-            $self->_username
-        ),
-    );
-
-    $stories = $self->_filter_chores_and_maybe_warn_user($stories);
-
-    return unless $stories->@*;
-
-    my %stories_lookup = map { $_->name => $_ } $stories->@*;
-    my $chosen_story = choose( [ sort keys %stories_lookup ] );
-    return unless $chosen_story;
-
-    return $stories_lookup{$chosen_story};
 }
 
 sub _confirm_story ( $self, $text ) {
