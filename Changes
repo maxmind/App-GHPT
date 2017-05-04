@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.000002 2017-05-04
+
 - The "--project" CLI argument is now optional. By default all projects are
   searched for stories which can be delivered.
 
