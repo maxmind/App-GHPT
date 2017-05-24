@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Documentation improvements only. No code changes.
+
+
 1.000003 2017-05-18
 
 - Removed the use List::Gather. This seems to be the most likely culprit for
