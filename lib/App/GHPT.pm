@@ -112,6 +112,14 @@ The fix is to regenerate the OAuth token. Delete the C<~/.config/hub> file if
 you've got one, and then run a C<hub> command manually, such as
 C<hub browse>. After authenticating, you should be able to use this script.
 
+=head2 "No started stories found"
+
+If you get this message but you definitely have stories which are in the
+"started" or "finished" states, then there's probably an error with your
+configuration. Double check your PT username and token as seen on
+L<https://www.pivotaltracker.com/profile> against what you see via C<git
+config --global --get-regexp '^submit-work'>
+
 =head1 BUGS
 
 This requires 'hub' to be installed and configured.
