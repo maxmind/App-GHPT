@@ -12,6 +12,11 @@ our $VERSION = '1.000004';
 
 __END__
 
+=head1 SYNOPSIS
+
+    # configure as per instructions below
+    $> gh-pt.pl
+
 =head1 DESCRIPTION
 
 This is a command line tool to help link together
@@ -99,7 +104,7 @@ When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
 name and password that it uses to generate an OAuth token and stores it in
 C<~/.config/hub>. If you have not used hub yet, this script will exit with:
 
-    $ gh-pt.pl --project my-project
+    $ gh-pt.pl
     Error creating pull request: Unauthorized (HTTP 401)
     Bad credentials
 
