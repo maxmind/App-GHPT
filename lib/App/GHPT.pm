@@ -99,6 +99,26 @@ You'll also need to tell git about your PT account:
 Your actual username and token can be found at
 L<https://www.pivotaltracker.com/profile>.
 
+=head1 COMMAND LINE OPTIONS
+
+This tool accepts the following options:
+
+=head2 --project Project-Name
+
+The name of the PT project in which to look for stories. By default, all
+projects are searched one at a time. If you have a lot of projects you may
+want to limit this to just one.
+
+=head2 --base branch
+
+The branch against which the PR should be made. This default to the master
+branch.
+
+=head2 --dry-run
+
+Doesn't create a PR, just prints out the body of the PR that would have been
+created.
+
 =head1 TROUBLESHOOTING
 
 =head2 Bad Credentials
