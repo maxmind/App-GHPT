@@ -38,7 +38,10 @@ Hack, hack, hack.
 
 =item 3.
 
-Run this tool, which will do the following things for you:
+Run this tool while you are in a git checkout. You should have the branch for
+which you want to submit a PR currently checked out.
+
+Running this tool will do the following things for you:
 
 =over 8
 
