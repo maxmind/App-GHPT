@@ -25,10 +25,11 @@ has project => (
 );
 
 has base => (
-    is            => 'ro',
-    isa           => Str,
-    default       => 'master',
-    documentation => 'The base of the pull request.',
+    is      => 'ro',
+    isa     => Str,
+    default => 'master',
+    documentation =>
+        'The branch against which you want base the pull request. This defaults to master.',
 );
 
 has dry_run => (
