@@ -88,7 +88,8 @@ You'll also need to tell git about your PT account:
     git config --global submit-work.pivotaltracker.username thor
     git config --global submit-work.pivotaltracker.token ae158fa0dc6570c8403f04bd35738d81
 
-(Your actual token can be found at L<https://www.pivotaltracker.com/profile>)
+Your actual username and token can be found at
+L<https://www.pivotaltracker.com/profile>.
 
 =head1 TROUBLESHOOTING
 
