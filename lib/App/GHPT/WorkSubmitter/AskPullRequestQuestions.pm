@@ -14,6 +14,12 @@ has merge_to_branch_name => (
     required => 1,
 );
 
+has question_namespaces => (
+    is       => 'ro',
+    isa      => ArrayRef [Str],
+    required => 1,
+);
+
 has _changed_files => (
     is      => 'ro',
     isa     => 'App::GHPT::WorkSubmitter::ChangedFiles',
@@ -38,7 +44,7 @@ sub _build_questions ($self) {
     return [
         map { $_->new( changed_files => $self->_changed_files ) }
             Module::Pluggable::Object->new(
-            search_path => 'App::GHPT::WorkSubmitter::Question',
+            search_path => $self->question_namespaces,
             require     => 1,
             )->plugins,
     ];
