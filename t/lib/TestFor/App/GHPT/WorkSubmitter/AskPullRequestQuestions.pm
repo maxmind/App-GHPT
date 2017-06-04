@@ -4,6 +4,13 @@ use App::GHPT::Wrapper::OurTest::Class::Moose;
 
 use App::GHPT::WorkSubmitter::AskPullRequestQuestions ();
 
+sub test_startup {
+    my $self = shift;
+    $self->test_skip(
+        'This test does not run on Travis because of the way it uses git when testing a PR'
+    ) if $ENV{TRAVIS};
+}
+
 sub test_question_namespaces {
     local @INC = ( @INC, 't/lib' );
 
