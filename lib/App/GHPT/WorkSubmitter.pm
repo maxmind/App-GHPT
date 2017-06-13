@@ -39,6 +39,20 @@ has dry_run => (
     documentation => 'Dry run, just print out the PR we would have created',
 );
 
+has _question_namespaces => (
+    is      => 'ro',
+    isa     => ArrayRef [Str],
+    lazy    => 1,
+    default => sub ($self) {
+        my $ns = $self->_config_val('submit-work.question-namespaces');
+        [
+            $ns
+            ? ( split / +/, $ns )
+            : 'App::GHPT::WorkSubmitter::Question'
+        ];
+    },
+);
+
 has _username => (
     is      => 'ro',
     isa     => Str,
