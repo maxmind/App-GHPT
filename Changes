@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The namespace used for question classes is now configurable via the
+  `git.submit-work.question-namespaces` config item. This can contain multiple
+  namespaces separated by a space too.
+
+
 1.000004 2017-05-24
 
 - Documentation improvements only. No code changes.
