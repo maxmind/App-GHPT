@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::Role::FileInspector;
 
 use App::GHPT::Wrapper::OurMoose::Role;
 
-our $VERSION = '1.000005';
+our $VERSION = '1.000006';
 
 use IPC::Run3 qw( run3 );
 
