@@ -4,6 +4,8 @@ use App::GHPT::Wrapper::OurTest::Class::Moose;
 
 use App::GHPT::WorkSubmitter::AskPullRequestQuestions ();
 
+with 'TestRole::WithGitRepo';
+
 sub test_startup {
     my $self = shift;
     $self->test_skip(
