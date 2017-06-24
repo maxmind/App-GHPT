@@ -6,6 +6,7 @@ use File::pushd qw( pushd );
 use File::Which qw( which );
 use IPC::Run3 qw( run3 );
 use Path::Class qw( tempdir );
+use Try::Tiny;
 
 has _tempdir => (
     is      => 'ro',
@@ -22,6 +23,11 @@ before test_startup => sub ( $self, @ ) {
 
     $self->_tempdir;
 
+    unless ( try { $self->_run(qw( git config --get user.email )) } ) {
+        $self->_run(qw( git config user.email foo@example.com ));
+        $self->_run(qw( git config user.name Foo ));
+    }
+
     $self->_run(qw( git init ));
     open my $fh, '>', 'foo';
     print {$fh} 42 or die $!;
@@ -34,12 +40,12 @@ before test_startup => sub ( $self, @ ) {
 };
 
 sub _run ( $self, @command ) {
-    run3 \@command, \undef, \undef, \my $error;
+    run3 \@command, \undef, \my $stdout, \my $error;
     if ( $error || $? ) {
         die join q{ }, 'Problem running git:', @command, $error, $?;
     }
 
-    return;
+    return $stdout;
 }
 
 1;
