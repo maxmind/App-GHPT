@@ -23,11 +23,6 @@ before test_startup => sub ( $self, @ ) {
 
     $self->_tempdir;
 
-    unless ( try { $self->_run(qw( git config --get user.email )) } ) {
-        $self->_run(qw( git config user.email foo@example.com ));
-        $self->_run(qw( git config user.name Foo ));
-    }
-
     $self->_run(qw( git init ));
     open my $fh, '>', 'foo';
     print {$fh} 42 or die $!;
