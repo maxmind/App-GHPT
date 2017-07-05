@@ -4,7 +4,7 @@ use App::GHPT::Wrapper::Ourperl;
 
 use v5.20;
 
-our $VERSION = '1.000007';
+our $VERSION = '1.000008';
 
 1;
 
