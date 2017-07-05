@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- I should pull before releasing. :(
+
+
 1.000006 2017-07-04
 
 - Fixed tests so that they do not fail on systems without git installed.
