@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::ChangedFilesFactory;
 
 use App::GHPT::Wrapper::OurMoose;
 
-our $VERSION = '1.000006';
+our $VERSION = '1.000007';
 
 use IPC::Run3 qw( run3 );
 use App::GHPT::Types qw( ArrayRef HashRef Str );
