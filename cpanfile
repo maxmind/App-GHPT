@@ -41,6 +41,8 @@ requires "warnings" => "0";
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
+  requires "File::Which" => "0";
+  requires "File::pushd" => "0";
   requires "Hash::Objectify" => "0";
   requires "Test::Class::Moose" => "0.82";
   requires "Test::Class::Moose::AttributeRegistry" => "0";
@@ -48,6 +50,7 @@ on 'test' => sub {
   requires "Test::Differences" => "0";
   requires "Test::More" => "0.96";
   requires "Test::Output" => "0";
+  requires "Try::Tiny" => "0";
 };
 
 on 'test' => sub {
