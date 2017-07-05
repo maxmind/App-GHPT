@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Fixed tests so that they do not fail on systems without git installed.
+
+
 1.000005 2017-06-22
 
 - The namespace used for question classes is now configurable via the
