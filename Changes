@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- Fixed call to instantiate AskPullRequestQuestions object.
+
 1.000007 2017-07-04
 
 - I should pull before releasing. :(
