@@ -13,7 +13,7 @@ use List::AllUtils qw( part );
 use Path::Class qw( dir file );
 use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use WebService::PivotalTracker 0.04;
+use WebService::PivotalTracker 0.08;
 
 with 'MooseX::Getopt::Dashes';
 
@@ -69,6 +69,17 @@ has _pt_api => (
     builder => '_build_pt_api',
     documentation =>
         'A WebService::PivotalTracker object built using $self->_pt_token',
+);
+
+has _include_requester_name_in_pr => (
+    is      => 'ro',
+    isa     => 'Bool',
+    lazy    => 1,
+    default => sub ($self) {
+        my $inc
+            = $self->_config_val('submit-work.include-requester-name-in-pr');
+        return defined $inc ? $inc : 1;
+    },
 );
 
 sub _build_pt_api ($self) {
@@ -194,10 +205,15 @@ sub _confirm_story ( $self, $text ) {
 }
 
 sub _text_for_story ( $self, $story ) {
-    return join "\n\n",
+    join "\n\n",
         $story->name,
         $story->url,
-        $story->description ? $story->description : ();
+        ( $story->description ? $story->description : () ),
+        (
+        $self->_include_requester_name_in_pr
+        ? 'Reviewer: ' . $story->requested_by->name
+        : ()
+        ),
 }
 
 sub _create_pull_request ( $self, $text ) {
