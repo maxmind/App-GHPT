@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.000009 2018-01-04
+
 - Added an option to include the PT requester's name in the PR text. If your
   PRs are relayed to Slack or another communication mechanism this is an
   additional way to alert someone that they have work to review.
