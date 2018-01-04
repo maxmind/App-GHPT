@@ -46,7 +46,7 @@ sub _build_questions ($self) {
             Module::Pluggable::Object->new(
             search_path => $self->question_namespaces,
             require     => 1,
-            )->plugins,
+        )->plugins,
     ];
 }
 
