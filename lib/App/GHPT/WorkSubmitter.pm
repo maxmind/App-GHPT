@@ -13,7 +13,7 @@ use List::AllUtils qw( part );
 use Path::Class qw( dir file );
 use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use WebService::PivotalTracker 0.08;
+use WebService::PivotalTracker 0.10;
 
 with 'MooseX::Getopt::Dashes';
 
