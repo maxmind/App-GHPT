@@ -14,11 +14,11 @@ has [
         deleted_files
         modified_files
         )
-    ] => (
+] => (
     is       => 'ro',
     isa      => ArrayRef [Str],
     required => 1,
-    );
+);
 
 has _file_exists_hash => (
     is      => 'ro',
