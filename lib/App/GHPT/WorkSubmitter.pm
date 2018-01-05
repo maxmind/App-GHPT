@@ -13,7 +13,7 @@ use List::AllUtils qw( part );
 use Path::Class qw( dir file );
 use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
-use WebService::PivotalTracker 0.08;
+use WebService::PivotalTracker 0.10;
 
 with 'MooseX::Getopt::Dashes';
 
@@ -58,7 +58,8 @@ has _username => (
     isa     => Str,
     lazy    => 1,
     default => sub ($self) {
-        $self->_config_val('submit-work.pivotaltracker.username');
+        my $key = 'submit-work.pivotaltracker.username';
+        $self->_config_val($key) // $self->_require_git_config($key);
     },
 );
 
@@ -76,10 +77,18 @@ has _include_requester_name_in_pr => (
     isa     => 'Bool',
     lazy    => 1,
     default => sub ($self) {
-        my $inc
-            = $self->_config_val('submit-work.include-requester-name-in-pr');
-        return defined $inc ? $inc : 1;
+        return $self->_config_val('submit-work.include-requester-name-in-pr')
+            // 1;
     },
+);
+
+has _git_config => (
+    traits  => ['Hash'],
+    is      => 'ro',
+    isa     => 'HashRef',
+    lazy    => 1,
+    builder => '_build_git_config',
+    handles => { _config_val => 'get' },
 );
 
 sub _build_pt_api ($self) {
@@ -154,7 +163,8 @@ sub _append_question_answers ( $self, $text ) {
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _pt_token ($self) {
-    return $self->_config_val('submit-work.pivotaltracker.token');
+    my $key = 'submit-work.pivotaltracker.token';
+    return $self->_config_val($key) // $self->_require_git_config($key);
 }
 ## use critic
 
@@ -246,21 +256,29 @@ sub _update_pt_story ( $self, $story, $pr_url ) {
     return;
 }
 
-sub _config_val ( $self, $conf_key ) {
+sub _build_git_config ($self) {
     run3(
-        [ 'git', 'config', $conf_key ],
+        [ 'git', 'config', '--list' ],
         \undef,
-        \my $conf_value,
+        \my @conf_values,
         \my $error,
     );
 
     if ( $error || $? ) {
-        die
-            "Please set $conf_key using 'git config --global $conf_key VALUE'\n";
+        die q{Could not run "git config --list"}
+            . ( defined $error ? ": $error" : q{} );
     }
 
-    chomp $conf_value;
-    return $conf_value;
+    return {
+        map { split /=/, $_, 2 }
+            grep {/^submit-work/}
+            ## no critic (BuiltinFunctions::ProhibitComplexMappings)
+            map { chomp; $_ } @conf_values
+    };
+}
+
+sub _require_git_config ( $self, $key ) {
+    die "Please set $key using 'git config --global $key VALUE'\n";
 }
 
 __PACKAGE__->meta->make_immutable;
