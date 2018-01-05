@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Require the latest WebService::PivotalTracker, which is needed to include
+  the PT requester's name without throwing an exception.
+
+- Don't die if optional git configuration keys aren't present.
+
+
 1.000009 2018-01-04
 
 - Added an option to include the PT requester's name in the PR text. If your
@@ -10,6 +16,7 @@
 1.000008 2017-07-21
 
 - Fixed call to instantiate AskPullRequestQuestions object.
+
 
 1.000007 2017-07-04
 
