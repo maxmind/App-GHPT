@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+1.000010 2018-01-04
+
 - Require the latest WebService::PivotalTracker, which is needed to include
   the PT requester's name without throwing an exception.
 
