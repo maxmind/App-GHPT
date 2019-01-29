@@ -124,11 +124,6 @@ EOF
 };
 
 sub run ($self) {
-    unless ( -s dir( File::HomeDir->my_home )->file( '.config', 'hub' ) ) {
-        die
-            "hub does not appear to be set up. Please run 'hub browse' to set it up.\n";
-    }
-
     my $chosen_story = $self->_choose_pt_story;
     unless ($chosen_story) {
         die "No started stories found!\n";
@@ -232,6 +227,11 @@ sub _create_pull_request ( $self, $text ) {
         exit;
     }
 
+    unless ( -s dir( File::HomeDir->my_home )->file( '.config', 'hub' ) ) {
+        return $self->_create_pull_request_without_hub( $text );
+    }
+
+
     run3(
         [ qw(hub pull-request -F - -b), $self->base ],
         \$text,
@@ -248,6 +248,45 @@ sub _create_pull_request ( $self, $text ) {
     exit 1 if $?;
 
     return $hub_output;
+}
+
+sub _create_pull_request_without_hub ($self, $text) {
+    print STDERR "hub does not appear to be set up. Please run 'hub browse' to set it up.\n\n";
+
+    # get the remote url
+    my $url = $self->_config_val('remote.origin.url');
+    $url =~ s{^git[@]([^:]+):}{https://$1/};
+    $url =~ s{[.]git$}{/compare/};
+
+    run3(
+        [qw ( git rev-parse --abbrev-ref HEAD )],
+        \undef,
+        \my $branch_name,
+        \my $error,
+    );
+
+    if ( $error || $? ) {
+        die q{Could not run "git rev-parse --abbrev-ref HEAD"}
+            . ( defined $error ? ": $error" : q{} );
+    }
+
+    $url .= $self->base . '...' . $branch_name;
+
+    my ($title) = $text =~ s/^([^\n])\n\n//;
+
+    my $uri = URI->new($url);
+    $uri->query_form(
+        expand => 1,
+        title => $title,
+        'pull_request[body]' => $text,
+    );
+
+    print STDERR "If you want to manually create a pull request please visit:\n\n";
+    print STDERR "$uri\n\n";
+    print STDERR "And then type the url of the pull request here: ";
+    my $branch = <STDIN>;
+    chomp $branch;
+    return $branch;
 }
 
 sub _update_pt_story ( $self, $story, $pr_url ) {
@@ -271,7 +310,6 @@ sub _build_git_config ($self) {
 
     return {
         map { split /=/, $_, 2 }
-            grep {/^submit-work/}
             ## no critic (BuiltinFunctions::ProhibitComplexMappings)
             map { chomp; $_ } @conf_values
     };
