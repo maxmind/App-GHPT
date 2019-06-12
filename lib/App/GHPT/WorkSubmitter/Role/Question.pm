@@ -52,7 +52,7 @@ sub _trim ($text) {
 ## use critic
 
 sub format_qa_markdown ( $self, $question, $answer ) {
-    return <<"ENDOFMARKDOWN"
+    return <<"ENDOFMARKDOWN";
 ### Question ###
 @{[ _trim( $question )]}
 
