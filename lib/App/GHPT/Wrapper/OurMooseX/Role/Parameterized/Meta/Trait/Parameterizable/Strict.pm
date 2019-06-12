@@ -11,7 +11,7 @@ around construct_parameters => sub ( $orig, $self, %params ) {
         -alias    => 1,
         -excludes => 1,
         (
-            map { $_ => 1 }
+            map      { $_ => 1 }
                 grep {defined}
                 map  { $_->init_arg }
                 $self->parameters_metaclass->get_all_attributes
