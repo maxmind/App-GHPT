@@ -108,8 +108,7 @@ sub _build_project_ids ($self) {
     my $want = $self->project;
     if ($want) {
         for my $project ( $self->_pt_api->projects->@* ) {
-            my $munged_name = $project->name =~ s/ /-/gr;
-            return [ $project->id ] if $munged_name =~ /$want/i;
+            return [ $project->id ] if $project->name =~ /\Q$want/i;
         }
         die 'Could not find a project id for project named ' . $self->project;
     }
