@@ -20,23 +20,21 @@ PT stories with pull requests.
 
 The basic workflow is as follows:
 
-1. Start a story in Pivotal Tracker.
+1. Start a story in Pivotal Tracker. (Optional)
 2. Hack, hack, hack.
 3. Run this tool while you are in a git checkout. You should have the branch for
 which you want to submit a PR currently checked out.
 
     Running this tool will do the following things for you:
 
-    - Prompt you to select one of your active Pivotal Tracker stories.
-    - (Optional)
-
-        Ask you a set of questions about the work you've done. The answers are
-        included in your PR. The question generation can be customized by writing
-        plugins.
-
-    - Create a pull request on GitHub for the repo you are currently in, with the PT
-    story's title, URL, and description in the PR, a well as the optional
-    questions & answers.
+    - Prompt you to select one of your active Pivotal Tracker stories, or
+      create a new one.
+    - Ask you a set of questions about the work you've done. The answers are
+      included in your PR. The question generation can be customized by writing
+      plugins. (Optional)
+    - Create a pull request on GitHub for the repo you are currently in, with
+      the PT story's title, URL, and description in the PR, a well as the
+      optional questions & answers.
     - Add a comment on the PT story linking to the PR that was just created.
     - Change the PT story's status to "Delivered".
 
@@ -89,21 +87,43 @@ If you want to disable this, set the git config key
 
 This tool accepts the following options:
 
-## --project Project-Name
+## `--project "Project Name"`
 
-The name of the PT project in which to look for stories. By default, all
-projects are searched one at a time. If you have a lot of projects you may
+The name of the PT project in which to look for or create stories. By default,
+all projects are searched one at a time. If you have a lot of projects you may
 want to limit this to just one.
 
-## --base branch
+The `--project` argument will be matched case insensitively against all PT
+projects accessible to you.
+
+You can also omit this parameter and specify the project name via the
+`APP_GHPT_PROJECT` environment variable. It will be matched in the same
+fashion as the command line argument.
+
+## `--base branch`
 
 The branch against which the PR should be made. This defaults to the master
 branch.
 
-## --dry-run
+## `--dry-run`
 
-Doesn't create a PR, just prints out the body of the PR that would have been
-created.
+Doesn't create a PR or a story, just prints out the body of the PR or story
+that would have been created.
+
+## `--create-story`
+
+Instead of picking an existing story, create a new one.
+
+## `--story-name "Story Name"`
+
+The story name to use when creating a story.
+
+## `--requester "Requester Name"`
+
+The name of the PT requester to use in the PR description.
+
+The `--requester` argument will be matched case insensitively against all PT
+requesters accessible to you.
 
 # TROUBLESHOOTING
 
