@@ -28,7 +28,7 @@ has project => (
     is  => 'ro',
     isa => Str,
     documentation =>
-        'The name of the PT project to search. This will be matched against the names of all the projects you have access to. By default, all projects will be searched.',
+        'The name of the PT project to search. This will be matched, case insensitively, as a substring of the names of all the projects you have access to. By default, the APP_GHPT_PROJECT env var will be checked for this value, and if that is undefined then all projects will be searched.',
     default => sub {
         $ENV{APP_GHPT_PROJECT} // q{};
     },
@@ -43,10 +43,11 @@ has base => (
 );
 
 has dry_run => (
-    is            => 'ro',
-    isa           => Bool,
-    default       => 0,
-    documentation => 'Dry run, just print out the PR we would have created',
+    is      => 'ro',
+    isa     => Bool,
+    default => 0,
+    documentation =>
+        'Dry run, just print out the body of the PR or story we would have created.',
 );
 
 has requester => (
@@ -54,15 +55,14 @@ has requester => (
     isa     => Str,
     default => q{},
     documentation =>
-        q{When creating a story, this will be the requester. You can provide a substring of the person's name (case insensitive) and it will find them.},
+        'When creating a story, the name of the PT requester. This will be matched, case insensitively, as a substring of the names of all the possible requesters in projects you have access to. By default, all requesters will be searched.',
 );
 
 has story_name => (
-    is      => 'ro',
-    isa     => Str,
-    default => q{},
-    documentation =>
-        'When creating a story, this is the name (title) to set.',
+    is            => 'ro',
+    isa           => Str,
+    default       => q{},
+    documentation => 'When creating a story, the name (title) to set.',
 );
 
 has _question_namespaces => (

@@ -96,9 +96,9 @@ want to limit this to just one.
 The `--project` argument will be matched case insensitively against all PT
 projects accessible to you.
 
-You can also omit this parameter and specify the project name via the
+You can also omit this option and specify the project name via the
 `APP_GHPT_PROJECT` environment variable. It will be matched in the same
-fashion as the command line argument.
+fashion as the command line option.
 
 ## `--base branch`
 
