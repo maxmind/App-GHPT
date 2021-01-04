@@ -21,7 +21,7 @@ sub ask_question ( $self, $question, @responses ) {
             @responses,
             'Launch Editor'
         ],
-        { prompt => $question }
+        { prompt => $question, clear_screen => $ENV{'SUBMIT_WORK_CLEAR'} // 0 }
     ) or exit;    # user hit 'q' or ctrl-d to stop
 
     return $self->format_qa_markdown( $question, $choice )
