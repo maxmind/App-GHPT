@@ -29,7 +29,7 @@ sub test_question_namespaces {
 
     $ask = App::GHPT::WorkSubmitter::AskPullRequestQuestions->new(
         merge_to_branch_name => 'master',
-        question_namespaces =>
+        question_namespaces  =>
             [ 'Helper::QuestionNamespace1', 'Helper::QuestionNamespace2' ],
     );
 

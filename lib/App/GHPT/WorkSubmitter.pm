@@ -18,15 +18,15 @@ use WebService::PivotalTracker 0.10;
 with 'MooseX::Getopt::Dashes';
 
 has create_story => (
-    is  => 'ro',
-    isa => Bool,
+    is            => 'ro',
+    isa           => Bool,
     documentation =>
         'If true, will create a new story instead of finding an existing one.',
 );
 
 has project => (
-    is  => 'ro',
-    isa => Str,
+    is            => 'ro',
+    isa           => Str,
     documentation =>
         'The name of the PT project to search. This will be matched against the names of all the projects you have access to. By default, all projects will be searched.',
     default => sub {
@@ -35,9 +35,9 @@ has project => (
 );
 
 has base => (
-    is      => 'ro',
-    isa     => Str,
-    default => 'master',
+    is            => 'ro',
+    isa           => Str,
+    default       => 'master',
     documentation =>
         'The branch against which you want base the pull request. This defaults to master.',
 );
@@ -50,17 +50,17 @@ has dry_run => (
 );
 
 has requester => (
-    is      => 'ro',
-    isa     => Str,
-    default => q{},
+    is            => 'ro',
+    isa           => Str,
+    default       => q{},
     documentation =>
         q{When creating a story, this will be the requester. You can provide a substring of the person's name (case insensitive) and it will find them.},
 );
 
 has story_name => (
-    is      => 'ro',
-    isa     => Str,
-    default => q{},
+    is            => 'ro',
+    isa           => Str,
+    default       => q{},
     documentation =>
         'When creating a story, this is the name (title) to set.',
 );
@@ -90,10 +90,10 @@ has _username => (
 );
 
 has _pt_api => (
-    is      => 'ro',
-    isa     => 'WebService::PivotalTracker',
-    lazy    => 1,
-    builder => '_build_pt_api',
+    is            => 'ro',
+    isa           => 'WebService::PivotalTracker',
+    lazy          => 1,
+    builder       => '_build_pt_api',
     documentation =>
         'A WebService::PivotalTracker object built using $self->_pt_token',
 );
@@ -349,7 +349,7 @@ sub _create_pull_request ( $self, $text ) {
     );
 
     warn $err if $err;
-    exit 1 if $?;
+    exit 1    if $?;
 
     return $hub_output;
 }
@@ -374,7 +374,7 @@ sub _build_git_config ($self) {
     }
 
     return {
-        map { split /=/, $_, 2 }
+        map      { split /=/, $_, 2 }
             grep {/^submit-work/}
             ## no critic (BuiltinFunctions::ProhibitComplexMappings)
             map { chomp; $_ } @conf_values
