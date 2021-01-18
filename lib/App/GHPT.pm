@@ -105,7 +105,7 @@ A question is a class which consumes the
 L<App::GHPT::WorkSubmitter::Role::Question> and implements a method named
 C<ask>. See that role's documentation for details.
 
-By default, this tools looks for modules that have a a package name beginning
+By default, this tool looks for modules that have a package name beginning
 with C<App::GHPT::WorkSubmitter::Question> to find question classes. However,
 you can configure one or more alternative namespaces by setting the git config
 key C<submit-work.question-namespaces>. This should be a space-separated list
