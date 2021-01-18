@@ -9,8 +9,8 @@ with 'TestRole::WithGitRepo';
 sub test_startup {
     my $self = shift;
     $self->test_skip(
-        'This test does not run on Travis because of the way it uses git when testing a PR'
-    ) if $ENV{TRAVIS};
+        'This test does not run in CI because of the way it uses git when testing a PR'
+    ) if $ENV{CI};
 }
 
 sub test_question_namespaces {
