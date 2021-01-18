@@ -213,8 +213,10 @@ sub _append_question_answers ( $self, $text ) {
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _pt_token ($self) {
-    my $key = 'submit-work.pivotaltracker.token';
-    return $self->_config_val($key) // $self->_require_git_config($key);
+    my $env_key = 'PIVOTALTRACKER_TOKEN';
+    my $key     = 'submit-work.pivotaltracker.token';
+    return $ENV{$env_key} // $self->_config_val($key)
+        // $self->_require_git_config($key);
 }
 ## use critic
 

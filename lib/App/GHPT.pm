@@ -99,6 +99,8 @@ You'll also need to tell git about your PT account:
 Your actual username and token can be found at
 L<https://www.pivotaltracker.com/profile>.
 
+You can alternatively provide the token via the C<PIVOTALTRACKER_TOKEN> environment variable.
+
 =head1 CREATING PULL REQUEST QUESTIONS
 
 A question is a class which consumes the

@@ -1,8 +1,14 @@
 {{$NEXT}}
 
+- Support retrieving the Pivotal Tracker token from the environment variable
+  PIVOTALTRACKER_TOKEN. If set, the variable takes precedence over the value in
+  the Git config.
+
+
 1.000012 2019-06-17
 
 - Add feature to create simple stories. Written by Narsimham Chelluri.
+
 
 1.000011 2019-06-12
 
