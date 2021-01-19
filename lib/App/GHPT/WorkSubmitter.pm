@@ -313,7 +313,10 @@ sub _filter_chores_and_maybe_warn_user ( $self, $stories ) {
 }
 
 sub _confirm_story ( $self, $text ) {
-    my $result = $self->_choose( [ 'Accept', 'Edit' ], { prompt => $text, clear_screen => $ENV{'SUBMIT_WORK_CLEAR'} // 0 } );
+    my $result = $self->_choose(
+        [ 'Accept', 'Edit' ],
+        { prompt => $text, clear_screen => $ENV{'SUBMIT_WORK_CLEAR'} // 0 }
+    );
     return $text if $result eq 'Accept';
     my $fh = solicit($text);
     return do { local $/ = undef; <$fh> };
