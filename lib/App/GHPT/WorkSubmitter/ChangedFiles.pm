@@ -13,7 +13,7 @@ has [
         all_files
         deleted_files
         modified_files
-        )
+    )
 ] => (
     is       => 'ro',
     isa      => ArrayRef [Str],
@@ -50,9 +50,9 @@ sub file_exists ( $self, $path ) {
 # this is inefficently written, but it shouldn't really make any difference
 # for the number of files we're talking about here
 sub file_status ( $self, $path ) {
-    return 'A' if any { $_ eq $path } $self->added_files->@*;
-    return 'M' if any { $_ eq $path } $self->modified_files->@*;
-    return 'D' if any { $_ eq $path } $self->deleted_files->@*;
+    return 'A'  if any { $_ eq $path } $self->added_files->@*;
+    return 'M'  if any { $_ eq $path } $self->modified_files->@*;
+    return 'D'  if any { $_ eq $path } $self->deleted_files->@*;
     return q{ } if $self->file_exists($path);
     return undef;
 }

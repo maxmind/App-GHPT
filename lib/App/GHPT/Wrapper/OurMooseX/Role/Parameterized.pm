@@ -27,7 +27,7 @@ my ($import) = Moose::Exporter->setup_import_methods(
 sub import {
     my $for_role = caller();
 
-    $import->( undef,                       { into => $for_role } );
+    $import->( undef, { into => $for_role } );
     MooseX::SemiAffordanceAccessor->import( { into => $for_role } );
 
     my $caller_level = 1;
