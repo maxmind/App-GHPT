@@ -3,6 +3,7 @@
 - Support retrieving the Pivotal Tracker token from the environment variable
   PIVOTALTRACKER_TOKEN. If set, the variable takes precedence over the value in
   the Git config.
+- You may now set SUBMIT_WORK_CLEAR to clear the screen between questions.
 
 
 1.000012 2019-06-17
