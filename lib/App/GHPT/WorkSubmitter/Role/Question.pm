@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::Role::Question;
 
 use App::GHPT::Wrapper::OurMoose::Role;
 
-our $VERSION = '1.001000';
+our $VERSION = '1.001001';
 
 use Term::CallEditor qw( solicit );
 use Term::Choose qw( choose );
