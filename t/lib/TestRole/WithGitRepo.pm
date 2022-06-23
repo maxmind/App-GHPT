@@ -23,7 +23,8 @@ before test_startup => sub ( $self, @ ) {
 
     $self->_tempdir;
 
-    $self->_run(qw( git init -b main ));
+    $self->_run(qw( git init ));
+    $self->_run(qw( git symbolic-ref HEAD refs/heads/main ));
     open my $fh, '>', 'foo';
     print {$fh} 42 or die $!;
     close $fh;
