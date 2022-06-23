@@ -1,6 +1,7 @@
 {{$NEXT}}
 
 - The default branch is now C<main> instead of C<master>.
+- Remove C<Path::Class> dependency.
 
 1.001000 2021-01-19
 

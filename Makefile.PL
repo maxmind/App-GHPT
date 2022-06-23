@@ -20,7 +20,6 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.020000",
   "NAME" => "App::GHPT",
   "PREREQ_PM" => {
-    "DDP" => 0,
     "File::HomeDir" => 0,
     "FindBin" => 0,
     "IPC::Run3" => 0,
@@ -84,7 +83,6 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "DDP" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::HomeDir" => 0,
   "File::Spec" => 0,

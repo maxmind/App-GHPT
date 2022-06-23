@@ -10,7 +10,6 @@ use File::HomeDir       ();
 use IPC::Run3           qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
 use List::AllUtils      qw( part );
-use Path::Class         qw( dir file );
 use Pithub              ();
 use Term::CallEditor    qw( solicit );
 use Term::Choose        qw( choose );
