@@ -5,7 +5,7 @@ package App::GHPT::Wrapper::Ourperl;
 use strict;
 use warnings;
 
-our $VERSION = '1.001001';
+our $VERSION = '2.000000';
 
 use Import::Into;
 
