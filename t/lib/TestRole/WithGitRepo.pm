@@ -23,7 +23,7 @@ before test_startup => sub ( $self, @ ) {
 
     $self->_tempdir;
 
-    $self->_run(qw( git init ));
+    $self->_run(qw( git init -b main ));
     open my $fh, '>', 'foo';
     print {$fh} 42 or die $!;
     close $fh;

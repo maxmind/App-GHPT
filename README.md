@@ -99,7 +99,7 @@ want to limit this to just one.
 
 ## --base branch
 
-The branch against which the PR should be made. This defaults to the master
+The branch against which the PR should be made. This defaults to the main
 branch.
 
 ## --dry-run

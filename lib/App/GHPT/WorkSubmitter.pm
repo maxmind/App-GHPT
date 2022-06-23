@@ -37,9 +37,9 @@ has project => (
 has base => (
     is            => 'ro',
     isa           => Str,
-    default       => 'master',
+    default       => 'main',
     documentation =>
-        'The branch against which you want base the pull request. This defaults to master.',
+        'The branch against which you want base the pull request. This defaults to main.',
 );
 
 has dry_run => (

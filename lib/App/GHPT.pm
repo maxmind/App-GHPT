@@ -134,7 +134,7 @@ want to limit this to just one.
 
 =head2 --base branch
 
-The branch against which the PR should be made. This defaults to the master
+The branch against which the PR should be made. This defaults to the main
 branch.
 
 =head2 --dry-run

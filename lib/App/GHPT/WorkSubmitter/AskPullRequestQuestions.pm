@@ -67,7 +67,7 @@ __END__
 =head1 SYNOPSIS
 
    my $markdown = App::GHPT::WorkSubmitter::AskPullRequestQuestions->new(
-        merge_to_branch_name => 'master',
+        merge_to_branch_name => 'main',
    )->ask_questions;
 
 =head1 DESCRIPTION
@@ -83,7 +83,7 @@ them to produce markdown.
 =head2 merge_to_branch_name
 
 The name of the branch that we're creating the pull request against.  This is
-probably C<master>.
+probably C<main>.
 
 Required. Str.
 

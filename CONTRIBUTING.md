@@ -121,7 +121,7 @@ included in the documentation as a contributor (using the attribution on the
 commit or patch), unless you specifically request for it not to be. If you
 wish to be listed under a different name or address, you should submit a pull
 request to the .mailmap file to contain the correct mapping.
-[Check here](https://github.com/git/git/blob/master/Documentation/mailmap.txt)
+[Check here](https://github.com/git/git/blob/main/Documentation/mailmap.txt)
 for more information on git's .mailmap files.
 
 This file was generated via Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.014 from a

@@ -73,7 +73,7 @@ __END__
 use v5.20;
 
     my $factory = App::GHPT::WorkSubmitter::ChangedFilesFactory->new(
-        merge_to_branch_name => 'master',
+        merge_to_branch_name => 'main',
     );
 
     my $changed_files = $factory->changed_files;
