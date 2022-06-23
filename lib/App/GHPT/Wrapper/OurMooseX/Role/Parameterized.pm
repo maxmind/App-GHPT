@@ -6,7 +6,7 @@ our $VERSION = '1.001001';
 
 use Import::Into;
 use Moose::Exporter;
-use Moose::Util qw( find_meta );
+use Moose::Util                    qw( find_meta );
 use MooseX::Role::Parameterized    ();
 use MooseX::SemiAffordanceAccessor ();
 use

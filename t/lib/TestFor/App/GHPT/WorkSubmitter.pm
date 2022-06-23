@@ -2,7 +2,7 @@ package TestFor::App::GHPT::WorkSubmitter;
 
 use App::GHPT::Wrapper::OurTest::Class::Moose;
 
-use Hash::Objectify qw( objectify );
+use Hash::Objectify       qw( objectify );
 use Helper::MockPTAPI     ();
 use Helper::WorkSubmitter ();
 use Test::Differences;

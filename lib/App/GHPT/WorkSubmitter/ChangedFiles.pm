@@ -4,7 +4,7 @@ use App::GHPT::Wrapper::OurMoose;
 
 our $VERSION = '1.001001';
 
-use List::Util 1.44 qw( any uniq );
+use List::Util 1.44  qw( any uniq );
 use App::GHPT::Types qw( ArrayRef HashRef Str );
 
 has [

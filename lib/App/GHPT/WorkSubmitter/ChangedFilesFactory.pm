@@ -4,7 +4,7 @@ use App::GHPT::Wrapper::OurMoose;
 
 our $VERSION = '1.001001';
 
-use IPC::Run3 qw( run3 );
+use IPC::Run3        qw( run3 );
 use App::GHPT::Types qw( ArrayRef HashRef Str );
 use App::GHPT::WorkSubmitter::ChangedFiles;
 

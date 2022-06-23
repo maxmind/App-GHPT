@@ -6,13 +6,13 @@ our $VERSION = '1.001001';
 
 use App::GHPT::Types qw( ArrayRef Bool PositiveInt Str );
 use App::GHPT::WorkSubmitter::AskPullRequestQuestions;
-use File::HomeDir ();
-use IPC::Run3 qw( run3 );
+use File::HomeDir       ();
+use IPC::Run3           qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
-use List::AllUtils qw( part );
-use Path::Class qw( dir file );
-use Term::CallEditor qw( solicit );
-use Term::Choose qw( choose );
+use List::AllUtils      qw( part );
+use Path::Class         qw( dir file );
+use Term::CallEditor    qw( solicit );
+use Term::Choose        qw( choose );
 use WebService::PivotalTracker 0.10;
 
 with 'MooseX::Getopt::Dashes';
@@ -264,7 +264,7 @@ sub _choose_pt_story ($self) {
                     '(owner:%s AND (state:started OR state:finished))',
                     $self->_username
                 ),
-                )->@*
+            )->@*
         } $self->_project_ids->@*
     ];
 
