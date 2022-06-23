@@ -50,6 +50,42 @@ has dry_run => (
     documentation => 'Dry run, just print out the PR we would have created',
 );
 
+has github_protocol => (
+    is            => 'ro',
+    isa           => Str,
+    predicate     => '_has_github_protocol',
+    documentation => 'The protocol you want to use for GitHub API request.',
+);
+
+has github_token => (
+    is            => 'ro',
+    isa           => Str,
+    predicate     => '_has_github_token',
+    documentation => 'Your GitHub token for API access.',
+);
+
+has pivotaltracker_token => (
+    is            => 'ro',
+    isa           => Str,
+    lazy          => 1,
+    builder       => '_build_pivotaltracker_token',
+    documentation => 'Your Pivotal Tracker token for API access.',
+);
+
+has pivotaltracker_username => (
+    is      => 'ro',
+    isa     => Str,
+    lazy    => 1,
+    default => sub ($self) {
+        my $env_key = 'PIVOTALTRACKER_USERNAME';
+        my $key     = 'submit-work.pivotaltracker.username';
+
+        return $ENV{$env_key} // $self->_config_val($key)
+            // $self->_require_env_or_git_config( $env_key, $key );
+    },
+    documentation => 'Your Pivotal Tracker username for API access.',
+);
+
 has requester => (
     is            => 'ro',
     isa           => Str,
@@ -81,32 +117,19 @@ has _question_namespaces => (
     },
 );
 
-has _username => (
-    is      => 'ro',
-    isa     => Str,
-    lazy    => 1,
-    default => sub ($self) {
-        my $env_key = 'PIVOTALTRACKER_USERNAME';
-        my $key     = 'submit-work.pivotaltracker.username';
-
-        return $ENV{$env_key} // $self->_config_val($key)
-            // $self->_require_env_or_git_config( $env_key, $key );
-    },
-);
-
-has _gh_api => (
+has _github_api => (
     is      => 'ro',
     isa     => 'Pithub',
     lazy    => 1,
-    builder => '_build_gh_api',
+    builder => '_build_github_api',
 );
 
-has _gh_ua => (
+has _github_ua => (
     traits    => ['NoGetopt'],
-    init_arg  => 'gh_ua',
+    init_arg  => 'github_ua',
     is        => 'ro',
     isa       => 'LWP::UserAgent',
-    predicate => '_has_gh_ua',
+    predicate => '_has_github_ua',
 );
 
 has _pt_api => (
@@ -115,7 +138,7 @@ has _pt_api => (
     lazy          => 1,
     builder       => '_build_pt_api',
     documentation =>
-        'A WebService::PivotalTracker object built using $self->_pt_token',
+        'A WebService::PivotalTracker object built using $self->pivotaltracker_token',
 );
 
 has _include_requester_name_in_pr => (
@@ -145,35 +168,60 @@ has _project_ids => (
     builder => '_build_project_ids',
 );
 
-sub _build_gh_api ($self) {
-    my ( $host, $user, $repo ) = $self->_gh_info;
+sub _build_github_api ($self) {
+    my ( $host, $user, $repo ) = $self->_github_info;
     my $hub_config = $self->_hub_config->{$host}[0] // {};
 
-    my $protocol = $self->_gh_protocol($hub_config);
+    my $protocol = $self->_github_protocol($hub_config);
 
     return Pithub->new(
         user  => $user,
         repo  => $repo,
         head  => $self->_git_current_branch,
-        token => $self->_gh_token($hub_config),
+        token => $self->_github_token($hub_config),
         (
             $host eq 'github.com' ? () : (
                 api_uri => "$protocol://$host/api/v3/",
             )
         ),
         (
-            $self->_has_gh_ua
+            $self->_has_github_ua
             ? (
-                ua => $self->_gh_ua,
+                ua => $self->_github_ua,
                 )
             : (),
         ),
     );
 }
 
+sub _github_protocol ( $self, $hub_config ) {
+    return $self->github_protocol if $self->_has_github_protocol;
+
+    return $ENV{GITHUB_PROTOCOL}
+        // $self->_config_val('submit-work.github.protocol')
+        // $hub_config->{protocol} // 'https';
+}
+
+sub _github_token ( $self, $hub_config ) {
+    return $self->github_token if $self->_has_github_token;
+
+    my $env_key = 'GITHUB_TOKEN';
+    my $key     = 'submit-work.github.token';
+    return $ENV{$env_key} // $self->_config_val($key)
+        // $hub_config->{oauth_token}
+        // $self->_require_env_or_git_config( $env_key, $key );
+}
+
+sub _build_pivotaltracker_token ($self) {
+    my $env_key = 'PIVOTALTRACKER_TOKEN';
+    my $key     = 'submit-work.pivotaltracker.token';
+    return $ENV{$env_key} // $self->_config_val($key)
+        // $self->_require_env_or_git_config( $env_key, $key );
+}
+
 sub _build_pt_api ($self) {
     return WebService::PivotalTracker->new(
-        token => $self->_pt_token,
+        token => $self->pivotaltracker_token,
     );
 }
 
@@ -253,27 +301,6 @@ sub _append_question_answers ( $self, $text ) {
         ;
 }
 
-sub _gh_protocol ( $self, $hub_config ) {
-    return $ENV{GITHUB_PROTOCOL}
-        // $self->_config_val('submit-work.github.protocol')
-        // $hub_config->{protocol} // 'https';
-}
-
-sub _gh_token ( $self, $hub_config ) {
-    my $env_key = 'GITHUB_TOKEN';
-    my $key     = 'submit-work.github.token';
-    return $ENV{$env_key} // $self->_config_val($key)
-        // $hub_config->{oauth_token}
-        // $self->_require_env_or_git_config( $env_key, $key );
-}
-
-sub _pt_token ($self) {
-    my $env_key = 'PIVOTALTRACKER_TOKEN';
-    my $key     = 'submit-work.pivotaltracker.token';
-    return $ENV{$env_key} // $self->_config_val($key)
-        // $self->_require_env_or_git_config( $env_key, $key );
-}
-
 sub _choose {
     my $self = shift;
     return choose(@_)
@@ -316,7 +343,7 @@ sub _choose_pt_story ($self) {
                 project_id => $_,
                 filter     => sprintf(
                     '(owner:%s AND (state:started OR state:finished))',
-                    $self->_username
+                    $self->pivotaltracker_username
                 ),
             )->@*
         } $self->_project_ids->@*
@@ -397,7 +424,7 @@ sub _create_pull_request ( $self, $text ) {
 
     my ( $title, $body ) = split /\n\n/, $text, 2;
 
-    my $res = $self->_gh_api->pull_requests->create(
+    my $res = $self->_github_api->pull_requests->create(
         data => {
             base  => $self->base,
             body  => $body,
@@ -408,13 +435,13 @@ sub _create_pull_request ( $self, $text ) {
 
     unless ( $res->success ) {
         die "Error while creating pull request:\n\n"
-            . _format_gh_error($res) . "\n";
+            . _format_github_error($res) . "\n";
     }
 
     return $res->content->{html_url};
 }
 
-sub _format_gh_error ($res) {
+sub _format_github_error ($res) {
     my $content = $res->content;
     if ( my $msg = $content->{message} ) {
         if ( my $errors = $content->{errors} ) {
@@ -425,7 +452,7 @@ sub _format_gh_error ($res) {
     return $res->raw_content;
 }
 
-sub _gh_info ($self) {
+sub _github_info ($self) {
     my $git_url = $self->_git_config->{'remote.origin.url'} // q{};
 
     if ( my ( $host, $user, $repo )
