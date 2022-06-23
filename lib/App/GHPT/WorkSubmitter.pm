@@ -11,9 +11,11 @@ use IPC::Run3           qw( run3 );
 use Lingua::EN::Inflect qw( PL PL_V );
 use List::AllUtils      qw( part );
 use Path::Class         qw( dir file );
+use Pithub              ();
 use Term::CallEditor    qw( solicit );
 use Term::Choose        qw( choose );
 use WebService::PivotalTracker 0.10;
+use YAML::PP;
 
 with 'MooseX::Getopt::Dashes';
 
@@ -89,6 +91,13 @@ has _username => (
     },
 );
 
+has _gh_api => (
+    is      => 'ro',
+    isa     => 'Pithub',
+    lazy    => 1,
+    builder => '_build_gh_api',
+);
+
 has _pt_api => (
     is            => 'ro',
     isa           => 'WebService::PivotalTracker',
@@ -117,18 +126,37 @@ has _git_config => (
     handles => { _config_val => 'get' },
 );
 
-sub _build_pt_api ($self) {
-    return WebService::PivotalTracker->new(
-        token => $self->_pt_token,
-    );
-}
-
 has _project_ids => (
     is      => 'ro',
     isa     => ArrayRef [PositiveInt],
     lazy    => 1,
     builder => '_build_project_ids',
 );
+
+sub _build_gh_api ($self) {
+    my ( $host, $user, $repo ) = $self->_gh_info;
+    my $hub_config = $self->_hub_config->{$host}[0] // {};
+
+    my $protocol = $self->_gh_protocol($hub_config);
+
+    return Pithub->new(
+        user  => $user,
+        repo  => $repo,
+        head  => $self->_git_current_branch,
+        token => $self->_gh_token($hub_config),
+        (
+            $host eq 'github.com' ? () : (
+                api_uri => "$protocol://$host/api/v3/",
+            )
+        ),
+    );
+}
+
+sub _build_pt_api ($self) {
+    return WebService::PivotalTracker->new(
+        token => $self->_pt_token,
+    );
+}
 
 sub _build_project_ids ($self) {
     my $want = $self->project;
@@ -171,11 +199,6 @@ EOF
 };
 
 sub run ($self) {
-    unless ( -s dir( File::HomeDir->my_home )->file( '.config', 'hub' ) ) {
-        die
-            "hub does not appear to be set up. Please run 'hub browse' to set it up.\n";
-    }
-
     my ( $requester, $chosen_story ) = $self->_choose_pt_story;
     unless ($requester) {
         die "No requester found!\n";
@@ -211,14 +234,24 @@ sub _append_question_answers ( $self, $text ) {
         ;
 }
 
-## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _gh_protocol ( $self, $hub_config ) {
+    return $ENV{GITHUB_PROTOCOL}
+        // $self->_config_val('submit-work.github.protocol')
+        // $hub_config->{protocol} // 'https';
+}
+
+sub _gh_token ( $self, $hub_config ) {
+    my $key = 'submit-work.github.token';
+    return $ENV{GITHUB_TOKEN} // $self->_config_val($key)
+        // $hub_config->{oauth_token} // $self->_require_git_config($key);
+}
+
 sub _pt_token ($self) {
     my $env_key = 'PIVOTALTRACKER_TOKEN';
     my $key     = 'submit-work.pivotaltracker.token';
     return $ENV{$env_key} // $self->_config_val($key)
         // $self->_require_git_config($key);
 }
-## use critic
 
 sub _choose {
     my $self = shift;
@@ -341,28 +374,76 @@ sub _create_pull_request ( $self, $text ) {
         exit;
     }
 
-    run3(
-        [ qw(hub pull-request -F - -b), $self->base ],
-        \$text,
-        \my $hub_output,
-        \my $err,
-        {
-            binmode_stdin  => ':encoding(UTF-8)',
-            binmode_stdout => ':encoding(UTF-8)',
-            binmode_stderr => ':encoding(UTF-8)',
+    my ( $title, $body ) = split /\n\n/, $text, 2;
+
+    my $res = $self->_gh_api->pull_requests->create(
+        data => {
+            base  => $self->base,
+            body  => $body,
+            head  => $self->_git_current_branch,
+            title => $title,
         },
     );
 
-    warn $err if $err;
-    exit 1    if $?;
+    unless ( $res->success ) {
+        die 'Error while creating pull request: '
+            . ( $res->content->{message} // $res->raw_content );
+    }
 
-    return $hub_output;
+    return $res->content->{html_url};
+}
+
+sub _gh_info ($self) {
+    my $git_url = $self->_git_config->{'remote.origin.url'} // q{};
+
+    if ( my ( $host, $user, $repo )
+        = $git_url =~ m{^git@([^:]+):([^/]+)/([^/]+?)(?:\.git)?$} ) {
+        return ( $host, $user, $repo );
+    }
+
+    my $uri = URI->new($git_url);
+    if ( $uri->can('host') && $uri->can('path') ) {
+        if ( my ( $user, $repo )
+            = $uri->path =~ m{/([^/]+)/([^/]+?)(?:\.git)?$} ) {
+            return ( $uri->host, $user, $repo );
+        }
+    }
+
+    die "Unable to determine host for remote origin ($git_url)!";
 }
 
 sub _update_pt_story ( $self, $story, $pr_url ) {
     $story->update( current_state => 'finished' );
     $story->add_comment( text => $pr_url );
     return;
+}
+
+sub _git_current_branch ($self) {
+    run3(
+        [qw( git rev-parse --abbrev-ref HEAD )],
+        \undef,
+        \my $branch,
+        \my $error,
+    );
+
+    if ( $error || $? ) {
+        die q{Could not run "git rev-parse --abbrev-ref HEAD"}
+            . ( defined $error ? ": $error" : q{} );
+    }
+
+    chomp $branch;
+
+    return $branch;
+}
+
+sub _hub_config ($self) {
+    my $file
+        = ( $ENV{XDG_CONFIG_HOME} // File::HomeDir->my_home . '/.config' )
+        . '/hub';
+
+    return {} unless -f $file;
+
+    return YAML::PP->new->load_file($file);
 }
 
 sub _build_git_config ($self) {
@@ -379,8 +460,7 @@ sub _build_git_config ($self) {
     }
 
     return {
-        map      { split /=/, $_, 2 }
-            grep {/^submit-work/}
+        map { split /=/, $_, 2 }
             ## no critic (BuiltinFunctions::ProhibitComplexMappings)
             map { chomp; $_ } @conf_values
     };
