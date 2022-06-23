@@ -2,9 +2,9 @@ package App::GHPT::WorkSubmitter::ChangedFilesFactory;
 
 use App::GHPT::Wrapper::OurMoose;
 
-our $VERSION = '1.001001';
+our $VERSION = '2.000000';
 
-use IPC::Run3 qw( run3 );
+use IPC::Run3        qw( run3 );
 use App::GHPT::Types qw( ArrayRef HashRef Str );
 use App::GHPT::WorkSubmitter::ChangedFiles;
 
@@ -168,7 +168,7 @@ __END__
 use v5.20;
 
   my $factory = App::GHPT::WorkSubmitter::ChangedFilesFactory->new(
-      merge_to_branch_name => 'master',
+      merge_to_branch_name => 'main',
   );
 
   my $changed_files = $factory->changed_files;

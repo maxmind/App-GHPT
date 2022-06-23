@@ -4,7 +4,7 @@ App::GHPT - A command line tool to simplify using Github and Pivotal Tracker for
 
 # VERSION
 
-version 1.001000
+version 2.000000
 
 # SYNOPSIS
 
@@ -42,21 +42,22 @@ which you want to submit a PR currently checked out.
 
 # SETUP
 
-## hub
+## GitHub config
 
-You should first set up `hub`. It's available at [https://hub.github.com](https://hub.github.com)
-and has installation instructions there.
+You'll need to tell git about your GitHub account:
 
-After installation, tell git config about it and check that it's working.
+    git config --global submit-work.github.token gh_ae158fa0dc6570c8403f04bd35738d81
 
-    git config --global --add hub.host github.com
-    hub issue
+This is a GitHub personal access token.
 
-(You'll need your GitHub and/or GHE credentials.)
+You can alternatively provide the token via the `GITHUB_TOKEN` environment variable.
 
-## pt config
+For compatibility with prior versions, the configuration file for `hub` will be
+used if the above are not set.
 
-You'll also need to tell git about your PT account:
+## PivotalTracker config
+
+You'll also need to tell git about your PivotalTracker account:
 
     git config --global submit-work.pivotaltracker.username thor
     git config --global submit-work.pivotaltracker.token ae158fa0dc6570c8403f04bd35738d81
@@ -69,7 +70,7 @@ You can alternatively provide the token via the `PIVOTALTRACKER_TOKEN` environme
 # CREATING PULL REQUEST QUESTIONS
 
 A question is a class which consumes the
-[App::GHPT::WorkSubmitter::Role::Question](https://metacpan.org/pod/App::GHPT::WorkSubmitter::Role::Question) and implements a method named
+[App::GHPT::WorkSubmitter::Role::Question](https://metacpan.org/pod/App%3A%3AGHPT%3A%3AWorkSubmitter%3A%3ARole%3A%3AQuestion) and implements a method named
 `ask`. See that role's documentation for details.
 
 By default, this tool looks for modules that have a package name beginning
@@ -99,7 +100,7 @@ want to limit this to just one.
 
 ## --base branch
 
-The branch against which the PR should be made. This defaults to the master
+The branch against which the PR should be made. This defaults to the main
 branch.
 
 ## --dry-run
@@ -108,20 +109,6 @@ Doesn't create a PR, just prints out the body of the PR that would have been
 created.
 
 # TROUBLESHOOTING
-
-## Bad Credentials
-
-When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
-name and password that it uses to generate an OAuth token and stores it in
-`~/.config/hub`. If you have not used hub yet, this script will exit with:
-
-    $ gh-pt.pl
-    Error creating pull request: Unauthorized (HTTP 401)
-    Bad credentials
-
-The fix is to regenerate the OAuth token. Delete the `~/.config/hub` file if
-you've got one, and then run a `hub` command manually, such as
-`hub browse`. After authenticating, you should be able to use this script.
 
 ## "No started stories found"
 
@@ -132,8 +119,6 @@ configuration. Double check your PT username and token as seen on
 config --global --get-regexp '^submit-work'`
 
 # BUGS
-
-This requires 'hub' to be installed and configured.
 
 A fatal error may occur if your branch exists locally, but you haven't pushed it yet.
 
@@ -162,7 +147,7 @@ Bugs may be submitted through [https://github.com/maxmind/App-GHPT/issues](https
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2021 by MaxMind, Inc.
+This software is Copyright (c) 2022 by MaxMind, Inc.
 
 This is free software, licensed under:
 

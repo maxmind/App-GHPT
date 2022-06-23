@@ -4,7 +4,7 @@ use App::GHPT::Wrapper::Ourperl;
 
 use v5.20;
 
-our $VERSION = '1.001001';
+our $VERSION = '2.000000';
 
 1;
 
@@ -77,21 +77,22 @@ Change the PT story's status to "Delivered".
 
 =head1 SETUP
 
-=head2 hub
+=head2 GitHub config
 
-You should first set up C<hub>. It's available at L<https://hub.github.com>
-and has installation instructions there.
+You'll need to tell git about your GitHub account:
 
-After installation, tell git config about it and check that it's working.
+    git config --global submit-work.github.token gh_ae158fa0dc6570c8403f04bd35738d81
 
-    git config --global --add hub.host github.com
-    hub issue
+This is a GitHub personal access token.
 
-(You'll need your GitHub and/or GHE credentials.)
+You can alternatively provide the token via the C<GITHUB_TOKEN> environment variable.
 
-=head2 pt config
+For compatibility with prior versions, the configuration file for C<hub> will be
+used if the above are not set.
 
-You'll also need to tell git about your PT account:
+=head2 Pivotal Tracker config
+
+You'll also need to tell git about your Pivotal Tracker account:
 
     git config --global submit-work.pivotaltracker.username thor
     git config --global submit-work.pivotaltracker.token ae158fa0dc6570c8403f04bd35738d81
@@ -134,7 +135,7 @@ want to limit this to just one.
 
 =head2 --base branch
 
-The branch against which the PR should be made. This defaults to the master
+The branch against which the PR should be made. This defaults to the main
 branch.
 
 =head2 --dry-run
@@ -143,20 +144,6 @@ Doesn't create a PR, just prints out the body of the PR that would have been
 created.
 
 =head1 TROUBLESHOOTING
-
-=head2 Bad Credentials
-
-When hub is first used to connect to GitHub/GitHub Enterprise, hub requires a
-name and password that it uses to generate an OAuth token and stores it in
-C<~/.config/hub>. If you have not used hub yet, this script will exit with:
-
-    $ gh-pt.pl
-    Error creating pull request: Unauthorized (HTTP 401)
-    Bad credentials
-
-The fix is to regenerate the OAuth token. Delete the C<~/.config/hub> file if
-you've got one, and then run a C<hub> command manually, such as
-C<hub browse>. After authenticating, you should be able to use this script.
 
 =head2 "No started stories found"
 
@@ -167,8 +154,6 @@ L<https://www.pivotaltracker.com/profile> against what you see via C<git
 config --global --get-regexp '^submit-work'>
 
 =head1 BUGS
-
-This requires 'hub' to be installed and configured.
 
 A fatal error may occur if your branch exists locally, but you haven't pushed it yet.
 

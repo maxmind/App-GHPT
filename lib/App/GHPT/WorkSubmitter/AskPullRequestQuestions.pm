@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::AskPullRequestQuestions;
 
 use App::GHPT::Wrapper::OurMoose;
 
-our $VERSION = '1.001001';
+our $VERSION = '2.000000';
 
 use App::GHPT::Types qw( ArrayRef Str );
 use Module::Pluggable::Object;
@@ -67,7 +67,7 @@ __END__
 =head1 SYNOPSIS
 
    my $markdown = App::GHPT::WorkSubmitter::AskPullRequestQuestions->new(
-        merge_to_branch_name => 'master',
+        merge_to_branch_name => 'main',
    )->ask_questions;
 
 =head1 DESCRIPTION
@@ -83,7 +83,7 @@ them to produce markdown.
 =head2 merge_to_branch_name
 
 The name of the branch that we're creating the pull request against.  This is
-probably C<master>.
+probably C<main>.
 
 Required. Str.
 
