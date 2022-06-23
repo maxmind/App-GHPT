@@ -100,7 +100,9 @@ You'll also need to tell git about your Pivotal Tracker account:
 Your actual username and token can be found at
 L<https://www.pivotaltracker.com/profile>.
 
-You can alternatively provide the token via the C<PIVOTALTRACKER_TOKEN> environment variable.
+You can alternatively provide your username via the C<PIVOTALTRACKER_USERNAME>
+environment variable and your token via the C<PIVOTALTRACKER_TOKEN> environment
+variable.
 
 =head1 CREATING PULL REQUEST QUESTIONS
 

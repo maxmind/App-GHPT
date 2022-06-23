@@ -85,8 +85,11 @@ has _username => (
     isa     => Str,
     lazy    => 1,
     default => sub ($self) {
-        my $key = 'submit-work.pivotaltracker.username';
-        $self->_config_val($key) // $self->_require_git_config($key);
+        my $env_key = 'PIVOTALTRACKER_USERNAME';
+        my $key     = 'submit-work.pivotaltracker.username';
+
+        return $ENV{$env_key} // $self->_config_val($key)
+            // $self->_require_env_or_git_config( $env_key, $key );
     },
 );
 
@@ -255,16 +258,18 @@ sub _gh_protocol ( $self, $hub_config ) {
 }
 
 sub _gh_token ( $self, $hub_config ) {
-    my $key = 'submit-work.github.token';
-    return $ENV{GITHUB_TOKEN} // $self->_config_val($key)
-        // $hub_config->{oauth_token} // $self->_require_git_config($key);
+    my $env_key = 'GITHUB_TOKEN';
+    my $key     = 'submit-work.github.token';
+    return $ENV{$env_key} // $self->_config_val($key)
+        // $hub_config->{oauth_token}
+        // $self->_require_env_or_git_config( $env_key, $key );
 }
 
 sub _pt_token ($self) {
     my $env_key = 'PIVOTALTRACKER_TOKEN';
     my $key     = 'submit-work.pivotaltracker.token';
     return $ENV{$env_key} // $self->_config_val($key)
-        // $self->_require_git_config($key);
+        // $self->_require_env_or_git_config( $env_key, $key );
 }
 
 sub _choose {
@@ -491,8 +496,9 @@ sub _build_git_config ($self) {
     };
 }
 
-sub _require_git_config ( $self, $key ) {
-    die "Please set $key using 'git config --global $key VALUE'\n";
+sub _require_env_or_git_config ( $self, $env, $key ) {
+    die
+        "Please set '$env' environment variable or $key using 'git config --global $key VALUE'\n";
 }
 
 __PACKAGE__->meta->make_immutable;
