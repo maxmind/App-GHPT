@@ -123,7 +123,8 @@ has _include_requester_name_in_pr => (
     isa     => 'Bool',
     lazy    => 1,
     default => sub ($self) {
-        return $self->_config_val('submit-work.include-requester-name-in-pr')
+        return $ENV{APP_GHPT_INCLUDE_REQUESTER_NAME_IN_PR}
+            // $self->_config_val('submit-work.include-requester-name-in-pr')
             // 1;
     },
 );

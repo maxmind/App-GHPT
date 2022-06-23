@@ -123,8 +123,9 @@ By default, the name of the PT story's requester will be included in the pull
 request text. This is helpful if you relay your project's PRs to Slack, as the
 requester can get alerted when their name is used.
 
-If you want to disable this, set the git config key
-C<submit-work.include-requester-name-in-pr> to C<0>.
+If you want to disable this, set the C<APP_GHPT_INCLUDE_REQUESTER_NAME_IN_PR>
+environment variable or the C<submit-work.include-requester-name-in-pr> Git
+config key to C<0>.
 
 =head1 COMMAND LINE OPTIONS
 
