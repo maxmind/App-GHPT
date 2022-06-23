@@ -97,6 +97,14 @@ has _gh_api => (
     builder => '_build_gh_api',
 );
 
+has _gh_ua => (
+    traits    => ['NoGetopt'],
+    init_arg  => 'gh_ua',
+    is        => 'ro',
+    isa       => 'LWP::UserAgent',
+    predicate => '_has_gh_ua',
+);
+
 has _pt_api => (
     is            => 'ro',
     isa           => 'WebService::PivotalTracker',
@@ -147,6 +155,13 @@ sub _build_gh_api ($self) {
             $host eq 'github.com' ? () : (
                 api_uri => "$protocol://$host/api/v3/",
             )
+        ),
+        (
+            $self->_has_gh_ua
+            ? (
+                ua => $self->_gh_ua,
+                )
+            : (),
         ),
     );
 }
