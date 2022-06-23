@@ -100,7 +100,9 @@ You'll also need to tell git about your Pivotal Tracker account:
 Your actual username and token can be found at
 L<https://www.pivotaltracker.com/profile>.
 
-You can alternatively provide the token via the C<PIVOTALTRACKER_TOKEN> environment variable.
+You can alternatively provide your username via the C<PIVOTALTRACKER_USERNAME>
+environment variable and your token via the C<PIVOTALTRACKER_TOKEN> environment
+variable.
 
 =head1 CREATING PULL REQUEST QUESTIONS
 
@@ -110,9 +112,10 @@ C<ask>. See that role's documentation for details.
 
 By default, this tool looks for modules that have a package name beginning
 with C<App::GHPT::WorkSubmitter::Question> to find question classes. However,
-you can configure one or more alternative namespaces by setting the git config
-key C<submit-work.question-namespaces>. This should be a space-separated list
-of namespaces under which questions can live.
+you can configure one or more alternative namespaces by setting the
+C<APP_GHPT_QUESTION_NAMESPACES> environment variable or the
+C<submit-work.question-namespaces> Git config key. This should be a
+space-separated list of namespaces under which questions can live.
 
 =head1 REQUESTER NAME IN PULL REQUESTS
 
@@ -120,8 +123,9 @@ By default, the name of the PT story's requester will be included in the pull
 request text. This is helpful if you relay your project's PRs to Slack, as the
 requester can get alerted when their name is used.
 
-If you want to disable this, set the git config key
-C<submit-work.include-requester-name-in-pr> to C<0>.
+If you want to disable this, set the C<APP_GHPT_INCLUDE_REQUESTER_NAME_IN_PR>
+environment variable or the C<submit-work.include-requester-name-in-pr> Git
+config key to C<0>.
 
 =head1 COMMAND LINE OPTIONS
 
