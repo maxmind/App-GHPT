@@ -400,11 +400,22 @@ sub _create_pull_request ( $self, $text ) {
     );
 
     unless ( $res->success ) {
-        die 'Error while creating pull request: '
-            . ( $res->content->{message} // $res->raw_content );
+        die "Error while creating pull request:\n\n"
+            . _format_gh_error($res) . "\n";
     }
 
     return $res->content->{html_url};
+}
+
+sub _format_gh_error ($res) {
+    my $content = $res->content;
+    if ( my $msg = $content->{message} ) {
+        if ( my $errors = $content->{errors} ) {
+            $msg .= "\n\n" . join "\n", map { $_->{message} } @$errors;
+        }
+        return $msg;
+    }
+    return $res->raw_content;
 }
 
 sub _gh_info ($self) {
