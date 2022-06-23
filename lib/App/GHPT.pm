@@ -112,9 +112,10 @@ C<ask>. See that role's documentation for details.
 
 By default, this tool looks for modules that have a package name beginning
 with C<App::GHPT::WorkSubmitter::Question> to find question classes. However,
-you can configure one or more alternative namespaces by setting the git config
-key C<submit-work.question-namespaces>. This should be a space-separated list
-of namespaces under which questions can live.
+you can configure one or more alternative namespaces by setting the
+C<APP_GHPT_QUESTION_NAMESPACES> environment variable or the
+C<submit-work.question-namespaces> Git config key. This should be a
+space-separated list of namespaces under which questions can live.
 
 =head1 REQUESTER NAME IN PULL REQUESTS
 

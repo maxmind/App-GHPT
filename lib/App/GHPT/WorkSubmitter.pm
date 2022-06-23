@@ -71,7 +71,8 @@ has _question_namespaces => (
     isa     => ArrayRef [Str],
     lazy    => 1,
     default => sub ($self) {
-        my $ns = $self->_config_val('submit-work.question-namespaces');
+        my $ns = $ENV{APP_GHPT_QUESTION_NAMESPACES}
+            // $self->_config_val('submit-work.question-namespaces');
         [
             $ns
             ? ( split / +/, $ns )
