@@ -55,9 +55,9 @@ You can alternatively provide the token via the `GITHUB_TOKEN` environment varia
 For compatibility with prior versions, the configuration file for `hub` will be
 used if the above are not set.
 
-## PivotalTracker config
+## Pivotal Tracker config
 
-You'll also need to tell git about your PivotalTracker account:
+You'll also need to tell git about your Pivotal Tracker account:
 
     git config --global submit-work.pivotaltracker.username thor
     git config --global submit-work.pivotaltracker.token ae158fa0dc6570c8403f04bd35738d81
@@ -65,7 +65,9 @@ You'll also need to tell git about your PivotalTracker account:
 Your actual username and token can be found at
 [https://www.pivotaltracker.com/profile](https://www.pivotaltracker.com/profile).
 
-You can alternatively provide the token via the `PIVOTALTRACKER_TOKEN` environment variable.
+You can alternatively provide your username via the `PIVOTALTRACKER_USERNAME`
+environment variable and your token via the `PIVOTALTRACKER_TOKEN` environment
+variable.
 
 # CREATING PULL REQUEST QUESTIONS
 
@@ -75,9 +77,10 @@ A question is a class which consumes the
 
 By default, this tool looks for modules that have a package name beginning
 with `App::GHPT::WorkSubmitter::Question` to find question classes. However,
-you can configure one or more alternative namespaces by setting the git config
-key `submit-work.question-namespaces`. This should be a space-separated list
-of namespaces under which questions can live.
+you can configure one or more alternative namespaces by setting the
+`APP_GHPT_QUESTION_NAMESPACES` environment variable or the
+`submit-work.question-namespaces` Git config key. This should be a
+space-separated list of namespaces under which questions can live.
 
 # REQUESTER NAME IN PULL REQUESTS
 
@@ -85,8 +88,9 @@ By default, the name of the PT story's requester will be included in the pull
 request text. This is helpful if you relay your project's PRs to Slack, as the
 requester can get alerted when their name is used.
 
-If you want to disable this, set the git config key
-`submit-work.include-requester-name-in-pr` to `0`.
+If you want to disable this, set the `APP_GHPT_INCLUDE_REQUESTER_NAME_IN_PR`
+environment variable or the `submit-work.include-requester-name-in-pr` Git
+config key to `0`.
 
 # COMMAND LINE OPTIONS
 
@@ -142,6 +146,7 @@ Bugs may be submitted through [https://github.com/maxmind/App-GHPT/issues](https
 - Kevin Phair <phair.kevin@gmail.com>
 - Mark Fowler <mfowler@maxmind.com>
 - Narsimham Chelluri <nchelluri@maxmind.com>
+- Nick Logan <nlogan@gmail.com>
 - Patrick Cronin <pcronin@maxmind.com>
 - William Storey <wstorey@maxmind.com>
 
