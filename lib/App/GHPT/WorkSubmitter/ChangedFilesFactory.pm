@@ -4,9 +4,9 @@ use App::GHPT::Wrapper::OurMoose;
 
 our $VERSION = '2.000000';
 
-use IPC::Run3        qw( run3 );
-use App::GHPT::Types qw( ArrayRef HashRef Str );
-use App::GHPT::WorkSubmitter::ChangedFiles;
+use IPC::Run3                              qw( run3 );
+use App::GHPT::Types                       qw( ArrayRef HashRef Str );
+use App::GHPT::WorkSubmitter::ChangedFiles ();
 
 has changed_files_class => (
     is      => 'ro',
