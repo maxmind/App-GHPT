@@ -5,9 +5,7 @@ use App::GHPT::Wrapper::OurTest::Class::Moose;
 use Hash::Objectify       qw( objectify );
 use Helper::MockPTAPI     ();
 use Helper::WorkSubmitter ();
-use Test::Differences;
-use Test::More;
-use Test::Output qw( stdout_is stdout_like );
+use Test::Output          qw( stdout_is stdout_like );
 
 # This test suite relies upon mock PT data returned by Helper::MockPTAPI
 # and mock Term::Choose::choose() data returned by Helper::WorkSubmitter.

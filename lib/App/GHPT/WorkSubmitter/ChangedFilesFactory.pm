@@ -11,7 +11,7 @@ use App::GHPT::WorkSubmitter::ChangedFiles;
 has changed_files_class => (
     is      => 'ro',
     isa     => Str,
-    default => 'App::GHPT::WorkSubmitter::ChangedFiles',
+    default => App::GHPT::WorkSubmitter::ChangedFiles::,
 );
 
 has merge_to_branch_name => (
