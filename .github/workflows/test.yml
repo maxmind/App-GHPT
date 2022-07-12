@@ -1,8 +1,10 @@
+---
 name: Tests
 
 on:
   push:
   pull_request:
+  workflow_dispatch:
   schedule:
     - cron: '5 15 * * SUN'
 
@@ -59,7 +61,7 @@ jobs:
           name: build_dir
           path: .
 
-      - run: cpm install -g
+      - run: cpm install -g --with-recommends
 
       - name: Install latest perltidy
         run: cpm install -g Perl::Tidy
@@ -74,4 +76,43 @@ jobs:
         env:
           AUTHOR_TESTING: 1
           RELEASE_TESTING: 1
+        run: perl Makefile.PL && make test
+
+  minimal-test-job:
+    needs: build-job
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-20.04
+        perl:
+          - "5.36"
+
+    name: Minimal Test Perl ${{ matrix.perl }} on ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: build_dir
+          path: .
+
+      - run: cpm install -g
+
+      - name: Set default Git config
+        run: |
+          git config --global init.defaultBranch main
+          git config --global user.email "test@example.com"
+          git config --global user.name "Test"
+
+      - name: Run Tests
+        env:
+          AUTHOR_TESTING: 0
+          RELEASE_TESTING: 0
         run: perl Makefile.PL && make test

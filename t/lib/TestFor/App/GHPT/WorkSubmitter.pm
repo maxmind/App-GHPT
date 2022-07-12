@@ -147,13 +147,64 @@ sub test_chore_filter ( $self, @ ) {
     );
 }
 
-sub test_token_from_env ( $self, @ ) {
+sub test_pt_token_from_env ( $self, @ ) {
     my $ws = App::GHPT::WorkSubmitter->new;
     local $ENV{PIVOTALTRACKER_TOKEN} = 'env value';
     is(
         $ws->pivotaltracker_token, 'env value',
         'value comes from environment'
     );
+}
+
+# Just try to increase code coverage.
+sub test_pithub_args ( $self, @ ) {
+    local $ENV{GITHUB_TOKEN} = 'seekrit';
+    my $ws  = App::GHPT::WorkSubmitter->new;
+    my $api = $ws->_github_api;
+    ok( !$ws->_is_ghe, 'not _is_ghe' );
+
+    my $args = $ws->_pithub_args;
+
+    ok( $args->{head}, 'head has been set' );
+    ok( $args->{user}, 'user' );
+    is( $args->{repo},  'App-GHPT', 'repo' );
+    is( $args->{token}, 'seekrit',  'token' );
+}
+
+# Just try to increase code coverage.
+sub test_github_info ( $self, @ ) {
+    my $ws = App::GHPT::WorkSubmitter->new;
+    is( $ws->_remote_val('host'), 'github.com', 'public github host' );
+    ok( $ws->_remote_val('user'), 'github username' );
+    is( $ws->_remote_val('repo'), 'App-GHPT', 'repo name' );
+}
+
+sub test_token_from_env ( $self, @ ) {
+    local $ENV{GITHUB_TOKEN} = undef;
+    local $ENV{GH_TOKEN}     = undef;
+
+    {
+        my $ws = App::GHPT::WorkSubmitter->new;
+        is( $ws->_token_from_env, undef, 'no token' );
+    }
+    {
+        local $ENV{GITHUB_TOKEN} = 'seekrit';
+        my $ws = App::GHPT::WorkSubmitter->new;
+        is( $ws->_token_from_env, 'seekrit', 'token from GITHUB_TOKEN' );
+    }
+    {
+        local $ENV{GH_TOKEN} = 'otherseekrit';
+        my $ws = App::GHPT::WorkSubmitter->new;
+        is( $ws->_token_from_env, 'otherseekrit', 'token from GH_TOKEN' );
+    }
+    {
+        local $ENV{GH_ENTERPRISE_TOKEN} = 'enterpriseseekrit';
+        my $ws = App::GHPT::WorkSubmitter->new;
+        is(
+            $ws->_token_from_env, undef,
+            'no token from GH_ENTERPRISE_TOKEN when remote is public GitHub'
+        );
+    }
 }
 
 __PACKAGE__->meta->make_immutable;
