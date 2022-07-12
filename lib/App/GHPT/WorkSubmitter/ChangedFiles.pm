@@ -2,7 +2,7 @@ package App::GHPT::WorkSubmitter::ChangedFiles;
 
 use App::GHPT::Wrapper::OurMoose;
 
-our $VERSION = '2.000000';
+our $VERSION = '2.000001';
 
 use List::Util 1.44  qw( any uniq );
 use App::GHPT::Types qw( ArrayRef HashRef Str );
