@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.000001 2022-07-12
+
 - Prefer GH_ENTERPRISE_TOKEN and GITHUB_ENTERPRISE_TOKEN if not a public GitHub
   host (GH#36) (Olaf Alders)
 
