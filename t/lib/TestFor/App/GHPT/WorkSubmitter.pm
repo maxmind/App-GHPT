@@ -159,8 +159,7 @@ sub test_pt_token_from_env ( $self, @ ) {
 # Just try to increase code coverage.
 sub test_pithub_args ( $self, @ ) {
     local $ENV{GITHUB_TOKEN} = 'seekrit';
-    my $ws  = App::GHPT::WorkSubmitter->new;
-    my $api = $ws->_github_api;
+    my $ws = App::GHPT::WorkSubmitter->new;
     ok( !$ws->_is_ghe, 'not _is_ghe' );
 
     my $args = $ws->_pithub_args;
